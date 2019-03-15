@@ -91,7 +91,7 @@ public class Table{
         public int getLastFreeRowPosition(int col){
             //Finds the last free position in one table, the top of the collum
             int r=-1;
-            for(int i=5;i>=0;i--){
+            for(int i=0;i<6;i++){
                 if(table[i][col]=='-') r=i;
                 else break;
             }
@@ -99,7 +99,7 @@ public class Table{
         }
         public boolean isColumnFull(int col){
             //if a column is full, the row 0 int the col is != -
-            return table[0][col]=='-';
+            return !(table[0][col]=='-');
         }
         public boolean gameOver(){return game_over;}
     //Setters
@@ -204,7 +204,7 @@ public class Table{
                  x
                 x
             */
-                for(int i=0;i<6;i++){
+                for(int i=5;i>=0;i--){
                     for(int j=0;j<7;j++){
                         if(isValid(i-3,j+3)&&table[i][j]!='-'){
                             if(table[i][j]==table[i-1][j+1]&&table[i][j]==table[i-2][j+2]&&table[i][j]==table[i-3][j+3]){
@@ -233,14 +233,15 @@ public class Table{
         public int utility(){
             if(hasWin()){
                 if(getChampion()=='X'){
-                    if(getPlayer()=='X') return 512;
-                    return -512;
+                    //if(getPlayer()=='X') return 512;
+                    return 512;
                 }
                 else{
-                    if(getPlayer()=='O') return 512;
+                    //if(getPlayer()=='O') return 512;
                     return -512;
                 }
             }
+            if(isGameOver()) return 0;
             int points=0;
             if(getPlayer()=='X') points+=16;
             else points-=16;
@@ -329,7 +330,7 @@ public class Table{
         //print table
         public String toString(){
             //Overide
-            String s="| 1 | 2 | 3 | 4| 5 | 6 | 7 |\n\n";
+            String s="\n\n";
             for(int i=0;i<6;i++){
                 for(int j=0;j<7;j++){
                     if(j!=6)//if it's not last column
