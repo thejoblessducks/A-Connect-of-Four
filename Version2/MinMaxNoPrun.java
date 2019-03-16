@@ -34,11 +34,6 @@ class MinMaxNoPrun{
                 maxPlay.setCol(son.getPlay().getCol());
                 maxPlay.setUtility(son.getPlay().getUtility());
             }
-            else if(p.getUtility()==maxPlay.getUtility()){
-                maxPlay.setRow(son.getPlay().getRow());
-                maxPlay.setCol(son.getPlay().getCol());
-                maxPlay.setUtility(son.getPlay().getUtility());
-            }
         }
         return maxPlay;
     }
@@ -51,11 +46,6 @@ class MinMaxNoPrun{
         for(Table son : tb.getDescendents('O')){
             Play p = max(son,depth+1);
             if(p.getUtility()<minPlay.getUtility()){
-                minPlay.setRow(son.getPlay().getRow());
-                minPlay.setCol(son.getPlay().getCol());
-                minPlay.setUtility(son.getPlay().getUtility());
-            }
-            else if(p.getUtility()==minPlay.getUtility()){
                 minPlay.setRow(son.getPlay().getRow());
                 minPlay.setCol(son.getPlay().getCol());
                 minPlay.setUtility(son.getPlay().getUtility());
