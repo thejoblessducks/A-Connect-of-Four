@@ -1,5 +1,5 @@
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.Random;//For when we find same utility plays and want to blind pick
 class MinMaxNoPrun{
     private int max_depth_pru;//Defines the maximum depth of search
     //The higher the depth the higher the difficulty
@@ -19,9 +19,7 @@ class MinMaxNoPrun{
 
 
     public Play minMax(Table tb){
-        Play p= max(new Table(tb),0);
-        System.out.println(p.getUtility());
-        return p;
+        return max(new Table(tb),0);
     }
     public Play max(Table tb,int depth){
         Random rand_play = new Random();
@@ -76,4 +74,5 @@ class MinMaxNoPrun{
         return minPlay;
     }
 }
+
 
