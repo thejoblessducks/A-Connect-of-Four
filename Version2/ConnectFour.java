@@ -17,65 +17,35 @@ public class ConnectFour{
         }
     }
     public static void minMaxNoPrun(Scanner in){
+        int difficulty,player_column=0,player=0;
+
         clearScreen();
-        System.out.println("*******MinMax No Prun*******");
-        System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
-        switch(in.nextInt()){
-            case 1://X is Human
-                int difficulty,player_column=0;
+            System.out.println("*******MinMax No Prun*******");
+            System.out.print("Depth/Difficulty: ");
+            difficulty=in.nextInt();
 
+        MinMaxNoPrun AI = new MinMaxNoPrun(difficulty,'O');
+        Table game = new Table();
+        
+        clearScreen();
+            System.out.println("*******MinMax No Prun*******");
+            System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
+            player=in.nextInt();
+        switch(player){
+            case 1://X is Human AI is O, X play first
                 clearScreen();
                     System.out.println("*******MinMax No Prun*******");
-                    System.out.println("Player 1 is Human");;
-                    wait(1000);
-                clearScreen();
-                    System.out.println("*******MinMax No Prun*******");
-                    System.out.print("Depth/Difficulty: ");
-                    difficulty=in.nextInt();
-                clearScreen();
-
-                System.out.println("*******MinMax No Prun*******");
-                System.out.println("Dificulty "+difficulty+"\n\n");
-
-                MinMaxNoPrun AI = new MinMaxNoPrun(difficulty,'O');
-                Table game = new Table();
-                System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
-                System.out.println(game);
-                game.setPlayer('O');//defines previous player as O so that X can start first
-                while(!game.isGameOver()){
-                    System.out.println("****************************");
-                    switch(game.getPlayer()){//retrieves the last player
-                        case 'X'://AI to move
-                            game.setPlayer('O');
-                            Play AI_Play=AI.minMax(game);
-                            game.makeNewPlay(AI_Play.getCol(),'O');
-                        break;
-                        case 'O'://Player to play
-                            System.out.print("Your move, ");
-                            try{
-                                do{
-                                    System.out.print("Column 1-7: ");
-                                    player_column=in.nextInt();
-                                }while(game.isColumnFull(player_column-1));
-                            }catch(Exception e){
-                                System.out.println("Error");
-                                break; //Found error, breaks switch returns to upper while, and back to case 'O'
-                            }
-                            game.makeNewPlay(player_column-1,'X');
-                        break;
-                        default: break;
-                    }
-                    System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
-                    System.out.println(game);
-
-                }
-                //Game has Ended with win/lose or draw for player
-                if(game.getChampion()=='X') System.out.println("You (X) WIN!!!");
-                else if(game.getChampion()=='O') System.out.println("You lose :(");
-                else System.out.println("It's a draw");
+                    System.out.println("Player 1 is Human");
+                    game.setPlayer('O');//defines previous player as O so that X can start first
+                wait(1000);
             break;
-            case 2://X is AI
-
+            case 2: //O is AI Human is X, O plays first
+                clearScreen();
+                    System.out.println("*******MinMax No Prun*******");
+                    System.out.println("Player 1 is AI");
+                    game.setPlayer('X');//defines previous player as X so that O(AI) can start first
+                wait(1000);
+                clearScreen();
             break;
             case 3: System.exit(0); break;
             default:
@@ -84,7 +54,46 @@ public class ConnectFour{
                 minMaxNoPrun(in);
             break;
         }
+        System.out.println("*******MinMax No Prun*******");
+        System.out.println("Depth/Difficulty: "+difficulty);                
+        if(player==1){
+            System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
+            System.out.println(game);
+        }
+        while(!game.isGameOver()){
+            System.out.println("****************************");
+            switch(game.getPlayer()){//retrieves the last player
+                case 'X'://AI to move
+                    game.setPlayer('O');
+                    Play AI_Play=AI.minMax(game);
+                    game.makeNewPlay(AI_Play.getCol(),'O');
+                break;
+                case 'O'://Player to play
+                    System.out.print("Your move, ");
+                    try{
+                        do{
+                            System.out.print("Column 1-7: ");
+                            player_column=in.nextInt();
+                        }while(game.isColumnFull(player_column-1));
+                    }catch(Exception e){
+                        System.out.println("Error");
+                        break; //Found error, breaks switch returns to upper while, and back to case 'O'
+                    }
+                    game.makeNewPlay(player_column-1,'X');
+                break;
+                default: break;
+            }
+            System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
+            System.out.println(game);
+
+        }
+
+        //Game has Ended with win/lose or draw for player
+        if(game.getChampion()=='X') System.out.println("You (X) WIN!!!");
+        else if(game.getChampion()=='O') System.out.println("You lose :(");
+        else System.out.println("It's a draw");
         System.out.println("Game Over");
+        System.exit(0);
     }
     public static void minMaxAlphBeta(Scanner in){
         //ClearScreen
@@ -101,6 +110,7 @@ public class ConnectFour{
             break;
         }
     }
+
     public static void main(String[] args) {
         Scanner in=new Scanner(System.in);
         System.out.println("Test:");
