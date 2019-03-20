@@ -64,11 +64,6 @@ public class Table{
             this.player=copy.getPlayer();
             this.champion=copy.getChampion();
             this.table=copy.getTable();
-            /*for(int i=0;i<6;i++){
-                for(int j=0;j<7;j++){
-                    this.table[i][j]=copy.table[i][j];
-                }
-            }*/
         }
     //Getters
         public Play getPlay(){
@@ -146,7 +141,7 @@ public class Table{
                 this.table[getLastFreeRowPosition(col)][col]=player;
             }catch(ArrayIndexOutOfBoundsException e){
                 //Move to make is not possible, either column is full os is out of table
-                setOutOfBounds(true);
+                this.setOutOfBounds(true);
             }
         }
         public LinkedList<Table> getDescendents(char player){
@@ -157,22 +152,20 @@ public class Table{
                 if(!isColumnFull(i)){
                     //There is at least one free position in this board
                     //As such we will now find the position, by making a new play to that column
-                    Table son=new Table(this); //copies table
+                    Table son=new Table(); //copies table
+                    son.table=this.getTable();
                     son.makeNewPlay(i,player);
-                    descendents.addFirst(son);
+                    if(!son.isOutOfBounds())
+                        descendents.addFirst(son);
                 }
             }
             return descendents;
         }
         //Check game state
-        public boolean isValid(int r,int col){
-            //checks if coord are inside table
-            return r>=0 && r<=5 && col>=0 && col<=6;
-        }
         public boolean hasWin(){
             //will search for the whole game to see if there is a connected four
             //Check Horizontally
-                for(int i=5;i>=0;i--){//r
+                for(int i=0;i<6;i++){//r
                     for(int j=0;j<4;j++){//c
                         if(table[i][j]!='-'){
                             if(table[i][j]==table[i][j+1]&&table[i][j]==table[i][j+2]&&table[i][j]==table[i][j+3]){
@@ -182,10 +175,10 @@ public class Table{
                     }
                 }
             //Check Vertically
-                for(int i=5;i>=3;i--){//row
-                    for(int j=0;j<7;j++){//col
+                for(int j=0;j<7;j++){//col
+                    for(int i=0;i<3;i++){//col
                         if(table[i][j]!='-'){
-                            if(table[i][j]==table[i-1][j]&&table[i][j]==table[i-2][j]&&table[i][j]==table[i-3][j]){
+                            if(table[i][j]==table[i+1][j]&&table[i][j]==table[i+2][j]&&table[i][j]==table[i+3][j]){
                                 setChampion(table[i][j]); return true;
                             }
                         }
@@ -212,9 +205,9 @@ public class Table{
                  x
                 x
             */
-                for(int i=0;i<6;i++){
-                    for(int j=0;j<7;j++){
-                        if(isValid(i-3,j+3)&&table[i][j]!='-'){
+                for(int i=3;i<6;i++){
+                    for(int j=0;j<4;j++){
+                        if(table[i][j]!='-'){
                             if(table[i][j]==table[i-1][j+1]&&table[i][j]==table[i-2][j+2]&&table[i][j]==table[i-3][j+3]){
                                 setChampion(table[i][j]); return true;
                             }
@@ -244,293 +237,104 @@ public class Table{
             else if(getPlayer()=='O')points-=16;*/
             if(hasWin()){
                 if(getChampion()=='X')
-                    return 512;
-                else if(getChampion()=='O')
                     return -512;
+                else if(getChampion()=='O')
+                    return 512;
             }
             if(isGameOver()) return 0;
+            u+=utilHorizontal();
+            u+=utilVertical();
+            u+=utilDiagonalRight();
+            u+=utilDiagonalLeft();
 
-            /*points=utilHorizontal(points);
-            points=utilVertical(points);
-            points=utilDiagonalRight(points);
-            points=utilDiagonalLeft(points);*/
-            //System.out.println(points);
-            int x=0,o=0,max_x,max_o;
-            //Horizontal
-                for(int i=0;i<6;i++){//r
-                    for(int j=0;j<4;j++){//c
-                        x=0;o=0;max_x=0;max_o=0;
-                        for(int k=0;k<4;k++){
-                            if(table[i][j+k]=='-'){
-                                continue;
-                                //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;o=0;
-                            }
-                            else if(table[i][j+k]=='X'){
-                                max_x++; //max_x=Math.max(max_x,x);
-                                //max_o=Math.max(max_o,o);
-                                //o=0;
-                            }
-                            else if(table[i][j+k]=='O'){
-                                max_o++; //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;
-                            }
-                        }
-                        if(max_o==3&&max_x==0)u-=50;
-                        else if(max_o==2&&max_x==0)u-=10;
-                        else if(max_o==1&&max_x==0)u-=1;
-                        else if(max_o==0&&max_x==1)u+=1;
-                        else if(max_x==2&&max_o==0)u+=10;
-                        else if(max_x==3&&max_o==0)u+=50;
-                    }
-                }
-            //vertical
-                for(int j=0;j<7;j++){//col
-                    for(int i=5;i>=3;i--){//row
-                        x=0;o=0;max_x=0;max_o=0;
-                        for(int k=0;k<4;k++){
-                            if(table[i-k][j]=='-'){
-                                continue;
-                                //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;o=0;
-                            }
-                            else if(table[i-k][j]=='X'){
-                                max_x++; //max_x=Math.max(max_x,x);
-                                //max_o=Math.max(max_o,o);
-                                //o=0;
-                            }
-                            else if(table[i-k][j]=='O'){
-                                max_o++; //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;
-                            }
-                        }
-                        if(max_o==3&&max_x==0)u-=50;
-                        else if(max_o==2&&max_x==0)u-=10;
-                        else if(max_o==1&&max_x==0)u-=1;
-                        else if(max_o==0&&max_x==1)u+=1;
-                        else if(max_x==2&&max_o==0)u+=10;
-                        else if(max_x==3&&max_o==0)u+=50;
-                    }
-                }
-            //Diagonal right
-                for(int i=0;i<3;i++){
-                    for(int j=0;j<4;j++){
-                        x=0;o=0;max_x=0;max_o=0;
-                        for(int k=0;k<4;k++){
-                            if(table[i+k][j+k]=='-'){
-                                continue;
-                                //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;o=0;
-                            }
-                            else if(table[i+k][j+k]=='X'){
-                                max_x++; //max_x=Math.max(max_x,x);
-                                //max_o=Math.max(max_o,o);
-                                //o=0;
-                            }
-                            else if(table[i+k][j+k]=='O'){
-                                max_o++; //max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;
-                            }
-                            /*if(table[i+k][j+k]=='X')x++;
-                            else if(table[i+k][j+k]=='O') o++;*/
-                        }
-                        if(max_o==3&&max_x==0)u-=50;
-                        else if(max_o==2&&max_x==0)u-=10;
-                        else if(max_o==1&&max_x==0)u-=1;
-                        else if(max_o==0&&max_x==1)u+=1;
-                        else if(max_x==2&&max_o==0)u+=10;
-                        else if(max_x==3&&max_o==0)u+=50;
-                    }
-                }
-            //Diagonal Left
-                for(int i=0;i<6;i++){
-                    for(int j=0;j<7;j++){
-                        x=0;o=0;max_x=0;max_o=0;
-                        if(isValid(i-3,j+3)/*&&table[i][j]!='-'*/){
-                            for(int k=0;k<4;k++){
-                                if(table[i-k][j+k]=='-'){
-                                    continue;
-                                    /*max_o=Math.max(max_o,o);
-                                    max_x=Math.max(max_x,x);
-                                    x=0;o=0;*/
-                                }
-                                else if(table[i-k][j+k]=='X'){
-                                    max_x++; //max_x=Math.max(max_x,x);
-                                    //max_o=Math.max(max_o,o);
-                                    //o=0;
-                                }
-                                else if(table[i-k][j+k]=='O'){
-                                    max_o++;// max_o=Math.max(max_o,o);
-                                    //max_x=Math.max(max_x,x);
-                                    //x=0;
-                                }
-                                /*if(table[i-k][j+k]=='X')x++;
-                                else if(table[i-k][j+k]=='O') o++;*/
-                            }
-                            if(max_o==3&&max_x==0)u-=50;
-                            else if(max_o==2&&max_x==0)u-=10;
-                            else if(max_o==1&&max_x==0)u-=1;
-                            else if(max_o==0&&max_x==1)u+=1;
-                            else if(max_x==2&&max_o==0)u+=10;
-                            else if(max_x==3&&max_o==0)u+=50;
-                        }
-                    }
-                }
-            if(this.getPlayer()=='X') u+=16;
-            else if(this.getPlayer()=='O')u-=16;
+            if(this.getPlayer()=='X') u-=16;
+            else if(this.getPlayer()=='O')u+=16;
             return u;
         }
-        public int utilHorizontal(int p){
-            int u=p;
-            int x=0,o=0,max_x,max_o;
-            for(int i=5;i>=0;i--){//r
+        public int utilHorizontal(){
+            int u=0;
+            int x=0,o=0;
+            for(int i=0;i<6;i++){//r
                 for(int j=0;j<4;j++){//c
-                    x=0;o=0;max_x=0;max_o=0;
+                    x=0;o=0;
                     for(int k=0;k<4;k++){
-                        if(table[i][j+k]=='-'){
-                            continue;
-                            //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;o=0;
-                        }
-                        else if(table[i][j+k]=='X'){
-                            max_x++; //max_x=Math.max(max_x,x);
-                            //max_o=Math.max(max_o,o);
-                            //o=0;
-                        }
-                        else if(table[i][j+k]=='O'){
-                            max_o++; //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;
-                        }
+                        if(table[i][j+k]=='X')
+                            x++;
+                        else if(table[i][j+k]=='O')
+                            o++;
                     }
-                    if(max_o==3&&max_x==0)u-=50;
-                    else if(max_o==2&&max_x==0)u-=10;
-                    else if(max_o==1&&max_x==0)u-=1;
-                    else if(max_o==0&&max_x==1)u+=1;
-                    else if(max_x==2&&max_o==0)u+=10;
-                    else if(max_x==3&&max_o==0)u+=50;
-                    if(getPlayer()=='X') u+=16;
-                    else if(getPlayer()=='O')u-=16;
+                    if(o==3 && x==0) u+=50;
+                    else if(o==2 && x==0) u+=10;
+                    else if(o==1 && x==0) u+=1;
+                    else if(o==0 && x==1) u-=1;
+                    else if(o==0 && x==2) u-=10;
+                    else if(o==0 && x==3) u-=50;
                 }
             }
-            //System.out.println(u);
             return u;
         }
-        public int utilVertical(int p){
-            int u=p;
-            int x=0,o=0,max_x,max_o;
+        public int utilVertical(){
+            int u=0;
+            int x=0,o=0;
             for(int j=0;j<7;j++){//col
-                for(int i=5;i>=3;i--){//row
-                    x=0;o=0;max_x=0;max_o=0;
+                for(int i=0;i<3;i++){//row
+                    x=0;o=0;
                     for(int k=0;k<4;k++){
-                        if(table[i-k][j]=='-'){
-                            continue;
-                            //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;o=0;
-                        }
-                        else if(table[i-k][j]=='X'){
-                            max_x++; //max_x=Math.max(max_x,x);
-                            //max_o=Math.max(max_o,o);
-                            //o=0;
-                        }
-                        else if(table[i-k][j]=='O'){
-                            max_o++; //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;
-                        }
+                        if(table[i+k][j]=='X')
+                            x++;
+                        else if(table[i+k][j]=='O')
+                            o++;
                     }
-                    if(max_o==3&&max_x==0)u-=50;
-                    else if(max_o==2&&max_x==0)u-=10;
-                    else if(max_o==1&&max_x==0)u-=1;
-                    else if(max_o==0&&max_x==1)u+=1;
-                    else if(max_x==2&&max_o==0)u+=10;
-                    else if(max_x==3&&max_o==0)u+=50;
-                    if(getPlayer()=='X') u+=16;
-                    else if(getPlayer()=='O')u-=16;
+                    if(o==3 && x==0) u+=50;
+                    else if(o==2 && x==0) u+=10;
+                    else if(o==1 && x==0) u+=1;
+                    else if(o==0 && x==1) u-=1;
+                    else if(o==0 && x==2) u-=10;
+                    else if(o==0 && x==3) u-=50;
                 }
             }
             return u;
         }
-        public int utilDiagonalRight(int u){
-            int x=0,o=0,max_x,max_o;
+        public int utilDiagonalRight(){
+            int u=0;
+            int x=0,o=0;
             for(int i=0;i<3;i++){
                 for(int j=0;j<4;j++){
-                    x=0;o=0;max_x=0;max_o=0;
+                    x=0;o=0;
                     for(int k=0;k<4;k++){
-                        if(table[i+k][j+k]=='-'){
-                            continue;
-                            //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;o=0;
-                        }
-                        else if(table[i+k][j+k]=='X'){
-                            max_x++; //max_x=Math.max(max_x,x);
-                            //max_o=Math.max(max_o,o);
-                            //o=0;
-                        }
-                        else if(table[i+k][j+k]=='O'){
-                            max_o++; //max_o=Math.max(max_o,o);
-                            //max_x=Math.max(max_x,x);
-                            //x=0;
-                        }
-                        /*if(table[i+k][j+k]=='X')x++;
-                        else if(table[i+k][j+k]=='O') o++;*/
+                        if(table[i+k][j+k]=='X')
+                            x++;
+                        else if(table[i+k][j+k]=='O')
+                            o++;
                     }
-                    if(max_o==3&&max_x==0)u-=50;
-                    else if(max_o==2&&max_x==0)u-=10;
-                    else if(max_o==1&&max_x==0)u-=1;
-                    else if(max_o==0&&max_x==1)u+=1;
-                    else if(max_x==2&&max_o==0)u+=10;
-                    else if(max_x==3&&max_o==0)u+=50;
-                    if(getPlayer()=='X') u+=16;
-                    else if(getPlayer()=='O')u-=16;
+                    if(o==3 && x==0) u+=50;
+                    else if(o==2 && x==0) u+=10;
+                    else if(o==1 && x==0) u+=1;
+                    else if(o==0 && x==1) u-=1;
+                    else if(o==0 && x==2) u-=10;
+                    else if(o==0 && x==3) u-=50;
                 }
             }
             return u;
         }
-        public int utilDiagonalLeft(int u){
-            int x=0,o=0,max_x,max_o;
-            for(int i=0;i<6;i++){
-                for(int j=0;j<7;j++){
-                    x=0;o=0;max_x=0;max_o=0;
-                    if(isValid(i-3,j+3)/*&&table[i][j]!='-'*/){
-                        for(int k=0;k<4;k++){
-                            if(table[i-k][j+k]=='-'){
-                                continue;
-                                /*max_o=Math.max(max_o,o);
-                                max_x=Math.max(max_x,x);
-                                x=0;o=0;*/
-                            }
-                            else if(table[i-k][j+k]=='X'){
-                                max_x++; //max_x=Math.max(max_x,x);
-                                //max_o=Math.max(max_o,o);
-                                //o=0;
-                            }
-                            else if(table[i-k][j+k]=='O'){
-                                max_o++;// max_o=Math.max(max_o,o);
-                                //max_x=Math.max(max_x,x);
-                                //x=0;
-                            }
-                            /*if(table[i-k][j+k]=='X')x++;
-                            else if(table[i-k][j+k]=='O') o++;*/
-                        }
-                        if(max_o==3&&max_x==0)u-=50;
-                        else if(max_o==2&&max_x==0)u-=10;
-                        else if(max_o==1&&max_x==0)u-=1;
-                        else if(max_o==0&&max_x==1)u+=1;
-                        else if(max_x==2&&max_o==0)u+=10;
-                        else if(max_x==3&&max_o==0)u+=50;
-                        if(getPlayer()=='X') u+=16;
-                        else if(getPlayer()=='O')u-=16;
+        public int utilDiagonalLeft(){
+            int u=0;
+            int x=0,o=0;
+            for(int i=3;i<6;i++){
+                for(int j=0;j<4;j++){
+                    x=0;o=0;
+                    for(int k=0;k<4;k++){
+                        if(table[i-k][j+k]=='X')
+                            x++;
+                        else if(table[i-k][j+k]=='O')
+                            o++;
                     }
+                    if(o==3 && x==0) u+=50;
+                    else if(o==2 && x==0) u+=10;
+                    else if(o==1 && x==0) u+=1;
+                    else if(o==0 && x==1) u-=1;
+                    else if(o==0 && x==2) u-=10;
+                    else if(o==0 && x==3) u-=50;
                 }
             }
             return u;
