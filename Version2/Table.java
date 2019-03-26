@@ -443,20 +443,26 @@ public class Table{
             for(int i=0;i<6;i++){
                 for(int j=0;j<7;j++){
                     if(j!=6){//if it's not last column
-                        if(table[i][j]=='X'){//AI
+                        if(table[i][j]=='X'){//Human
+                            s+="| "+ConsoleColors.GREEN_BOLD+table[i][j]+ConsoleColors.RESET+" ";
+                        }
+                        else if(table[i][j]=='O'){//AI
                             s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" ";
                         }
                         else{
-                            s+="| "+ConsoleColors.WHITE+table[i][j]+ConsoleColors.RESET+" ";
+                            s+="| - ";
                         }
                         //s+="| "+table[i][j]+" ";
                     }
                     else{
-                        if(table[i][j]=='X'){//AI
+                        if(table[i][j]=='X'){//Human
+                            s+="| "+ConsoleColors.GREEN_BOLD+table[i][j]+ConsoleColors.RESET+" |\n";
+                        }
+                        else if(table[i][j]=='O'){//AI
                             s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" |\n";
                         }
                         else{
-                            s+="| "+ConsoleColors.WHITE+table[i][j]+ConsoleColors.RESET+" |\n";
+                            s+="| - |\n";
                         }
                     }
                 }
