@@ -248,7 +248,7 @@ public class ConnectFour{
             break;
         }
         System.out.println("*******MinMax No Prun********");
-        System.out.println("Difficulty: "+difficulty"\n");
+        System.out.println("Difficulty: "+difficulty+"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
             System.out.println("-----------------------------");
