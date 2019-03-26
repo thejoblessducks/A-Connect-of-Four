@@ -6,7 +6,7 @@ public class ConnectFour{
       We give choice of MinMax with no pruning/with pruning or MCTS
     */
 
-/*------------------------Auxiliar Functions----------------------------------*/ 
+/*------------------------Auxiliar Functions----------------------------------*/
     public static void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -33,7 +33,7 @@ public class ConnectFour{
 
         MinMaxNoPrun AI = new MinMaxNoPrun(difficulty,'O');
         Table game = new Table();
-        
+
         clearScreen();
             System.out.println("*******MinMax No Prun*******");
             System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
@@ -45,6 +45,7 @@ public class ConnectFour{
                     System.out.println("Player 1 is Human");
                     game.setPlayer('O');//defines previous player as O so that X can start first
                 wait(1000);
+                clearScreen();
             break;
             case 2: //O is AI Human is X, O plays first
                 clearScreen();
@@ -62,7 +63,7 @@ public class ConnectFour{
             break;
         }
         System.out.println("*******MinMax No Prun********");
-        System.out.println("Depth/Difficulty: "+difficulty+"\n");   
+        System.out.println("Depth/Difficulty: "+difficulty+"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
             System.out.println("-----------------------------");
@@ -80,7 +81,7 @@ public class ConnectFour{
                     game.makeNewPlay(AI_Play.getCol(),'O');
                 break;
                 case 'O'://Player to play
-                    System.out.println("  X turn (Human)");                    
+                    System.out.println("  X turn (Human)");
                     System.out.print("Your move ");
                     try{
                         do{
@@ -102,9 +103,9 @@ public class ConnectFour{
         }
 
         //Game has Ended with win/lose or draw for player
-        if(game.getChampion()=='X') System.out.println("You (X) WIN!!!");
-        else if(game.getChampion()=='O') System.out.println("You lose :(");
-        else System.out.println("It's a draw");
+        if(game.getChampion()=='X') System.out.println(ConsoleColors.GREEN_BOLD+"You (X) WIN!!!"+ConsoleColors.RESET);
+        else if(game.getChampion()=='O') System.out.println(ConsoleColors.RED_BOLD+"You lose :("+ConsoleColors.RESET);
+        else System.out.println(ConsoleColors.WHITE_BOLD+"It's a draw"+ConsoleColors.RESET);
         System.out.println("Game Over");
         System.exit(0);
     }
@@ -123,7 +124,7 @@ public class ConnectFour{
 
         MinMaxAlphaBetaPrun AI = new MinMaxAlphaBetaPrun(difficulty,'O');
         Table game = new Table();
-        
+
         clearScreen();
             System.out.println("*******MinMax No Prun*******");
             System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
@@ -135,6 +136,7 @@ public class ConnectFour{
                     System.out.println("Player 1 is Human");
                     game.setPlayer('O');//defines previous player as O so that X can start first
                 wait(1000);
+                clearScreen();
             break;
             case 2: //O is AI Human is X, O plays first
                 clearScreen();
@@ -152,7 +154,7 @@ public class ConnectFour{
             break;
         }
         System.out.println("*******MinMax No Prun********");
-        System.out.println("Depth/Difficulty: "+difficulty+"\n");   
+        System.out.println("Depth/Difficulty: "+difficulty+"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
             System.out.println("-----------------------------");
@@ -170,7 +172,7 @@ public class ConnectFour{
                     game.makeNewPlay(AI_Play.getCol(),'O');
                 break;
                 case 'O'://Player to play
-                    System.out.println("  X turn (Human)");                    
+                    System.out.println("  X turn (Human)");
                     System.out.print("Your move ");
                     try{
                         do{
@@ -192,9 +194,9 @@ public class ConnectFour{
         }
 
         //Game has Ended with win/lose or draw for player
-        if(game.getChampion()=='X') System.out.println("You (X) WIN!!!");
-        else if(game.getChampion()=='O') System.out.println("You lose :(");
-        else System.out.println("It's a draw");
+        if(game.getChampion()=='X') System.out.println(ConsoleColors.GREEN_BOLD+"You (X) WIN!!!"+ConsoleColors.RESET);
+        else if(game.getChampion()=='O') System.out.println(ConsoleColors.RED_BOLD+"You lose :("+ConsoleColors.RESET);
+        else System.out.println(ConsoleColors.WHITE_BOLD+"It's a draw"+ConsoleColors.RESET);
         System.out.println("Game Over");
         System.exit(0);
     }
