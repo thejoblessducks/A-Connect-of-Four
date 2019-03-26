@@ -248,8 +248,7 @@ public class ConnectFour{
             break;
         }
         System.out.println("*******MinMax No Prun********");
-        double dif=(double)(difficulty/1_000_000_000.0);
-        System.out.println("Time/Difficulty: "+dif+"\n");
+        System.out.println("Difficulty: "+difficulty"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
             System.out.println("-----------------------------");
