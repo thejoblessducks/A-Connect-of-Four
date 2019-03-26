@@ -41,8 +41,9 @@ class MinMaxAlphaBetaPrun{
      * 
      * It is important to refer that we will never call the minBeta, for we are AI
     **/
-    private int max_depth;//the higher the depth, the harer the game will be
-    private char player;//Char thet defines the AI, Standart: 'O'
+    private int max_depth;    //the higher the depth, the harer the game will be
+    private char player;      //Char thet defines the AI, Standart: 'O'
+    private int nodes;        //Counter for nodes explored
     private MinMaxNoPrun minmax;
 
     public MinMaxAlphaBetaPrun(int max_depth,char player){
@@ -54,7 +55,14 @@ class MinMaxAlphaBetaPrun{
                         MinMax Alpha-Beta Prun Algorithm
 ------------------------------------------------------------------------------*/
     public Play alphaBeta(Table tb){
-        return max(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);
+            nodes=0;
+            double start,end,total;
+            start=System.nanoTime();
+        Play p = max(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);
+            end=System.nanoTime();
+            total=((double)(end-start)/1_000_000_000.0);
+            System.out.println("Nodes Explored: "+nodes+"; Time: "+total+" seconds;");
+        return p;
     }
     public Play max(Table tb,int depth,int alpha,int beta){
         Random rand_play=new Random();
@@ -63,8 +71,11 @@ class MinMaxAlphaBetaPrun{
         
         Play maxPlay = new Play(Integer.MIN_VALUE);
         for(Table son : tb.getDescendents('O')){
+            minmax.setNodes(0);
+            nodes++;
             //Equal to MinMaxNoPrun
                 Play p = minmax.min(son,depth+1);
+                nodes+=minmax.getNodes();
                 if(p.getUtility() > maxPlay.getUtility()){
                     maxPlay.setRow(son.getPlay().getRow());
                     maxPlay.setCol(son.getPlay().getCol());
@@ -82,32 +93,4 @@ class MinMaxAlphaBetaPrun{
             if(alpha < maxPlay.getUtility()) alpha=maxPlay.getUtility();
         }return maxPlay;
     }
-    /*We will never Call min for the A-B
-        public Play min(Table tb,int depth,int alpha,int beta){
-        Random rand_play=new Random();
-        if(tb.isGameOver() || depth == max_depth)
-            return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
-        
-        Play minPlay = new Play(Integer.MAX_VALUE);
-        for(Table son : tb.getDescendents('O')){
-            //Equal to MinMaxNoPrun
-                Play p = minmax.max(son,depth+1);
-                if(p.getUtility() < minPlay .getUtility()){
-                    minPlay .setRow(son.getPlay().getRow());
-                    minPlay .setCol(son.getPlay().getCol());
-                    minPlay .setUtility(p.getUtility());
-                }
-                else if(p.getUtility() == minPlay .getUtility()){
-                    if(rand_play.nextInt(2) == 0){
-                        minPlay .setRow(son.getPlay().getRow());
-                        minPlay .setCol(son.getPlay().getCol());
-                        minPlay .setUtility(p.getUtility());
-                    }
-                }
-            //Prunning
-            if(minPlay .getUtility() <= alpha) return minPlay ;
-            if(beta < minPlay .getUtility()) beta=minPlay .getUtility();
-        }return minPlay;
-    }
-    **/
 }
