@@ -44,33 +44,38 @@ class Node{
 Monte Carlo tree Search
 ------------------------------------------------------------------------------*/
 class MonteCarloTreeSearch{
-    private Node root;
-    private long time_to_exemine;
+    public Node root;
+    private long nodes_to_expand;
 
-    public MonteCarloTreeSearch(Table tb, long time_max){
-        this.time_to_exemine=time_max;
-        root = new Node(null, new Table(tb));
+    public MonteCarloTreeSearch(long nodes_to_expand){
+        this.nodes_to_expand=nodes_to_expand;
+    }
+    public MonteCarloTreeSearch(){
+        this.nodes_to_expand=100;
     }
 
-    public Play MCTS(){
-        for(long time=System.nanoTime()+time_to_exemine; time>System.nanoTime(); ){
+    public int MCTS(Table tb){
+        this.root= new Node(null, tb);
+        int n=0;
+        while(n<=this.nodes_to_expand){
             //while we still have time
             Node node_selected = nodeSelection();
-            if(node_selected==null) continue;
+            if(node_selected==null){n++; continue;}
 
             Node node_expanded = nodeExpantion(node_selected);
             double result = nodeSimulation(node_expanded);
             nodeBackPropagation(node_expanded,result);
+            n++;
         }
         int child_max=-1; //will store wich node produced best result;
         for(int i=0;i<7;i++){
             if(root.descendents[i] != null){
                 if(child_max==-1 || root.descendents[i].getVisits()>root.descendents[child_max].getVisits()){
-                    child_max=1;
+                    child_max=i;
                 }
             }
         }
-        return new Play(root.table.getLastFreeRowPosition(child_max),child_max);
+        return child_max;
     }
 
     public Node nodeSelection(){
@@ -139,7 +144,13 @@ class MonteCarloTreeSearch{
             else player='X';
             simulator.makeNewPlay(i,player);
         }
-        return simulator.utility();
+
+        if(simulator.getChampion()=='O')
+            return 1;
+        else if(simulator.getChampion()=='X')
+            return -1;
+        return 0;
+        //return simulator.utility();
     }
 
     public void nodeBackPropagation(Node explored, double result){
