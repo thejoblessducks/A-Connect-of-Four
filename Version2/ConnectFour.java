@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class ConnectFour{
     /*For this version, player X is the first to start, AI is O
@@ -119,7 +118,7 @@ public class ConnectFour{
         int difficulty,player_column=0,player=0;
 
         clearScreen();
-            System.out.println("*******MinMax No Prun*******");
+            System.out.println("*******MinMax AB Prun*******");
             System.out.print("Depth/Difficulty: ");
             difficulty=in.nextInt();
 
@@ -127,13 +126,13 @@ public class ConnectFour{
         Table game = new Table();
 
         clearScreen();
-            System.out.println("*******MinMax No Prun*******");
+            System.out.println("*******MinMax AB Prun*******");
             System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
             player=in.nextInt();
         switch(player){
             case 1://X is Human AI is O, X play first
                 clearScreen();
-                    System.out.println("*******MinMax No Prun*******");
+                    System.out.println("*******MinMax AB Prun*******");
                     System.out.println("Player 1 is Human");
                     game.setPlayer('O');//defines previous player as O so that X can start first
                 wait(1000);
@@ -141,7 +140,7 @@ public class ConnectFour{
             break;
             case 2: //O is AI Human is X, O plays first
                 clearScreen();
-                    System.out.println("*******MinMax No Prun*******");
+                    System.out.println("*******MinMax AB Prun*******");
                     System.out.println("Player 1 is AI");
                     game.setPlayer('X');//defines previous player as X so that O(AI) can start first
                 wait(1000);
@@ -154,7 +153,7 @@ public class ConnectFour{
                 minMaxNoPrun(in);
             break;
         }
-        System.out.println("*******MinMax No Prun********");
+        System.out.println("*******MinMax AB Prun********");
         System.out.println("Depth/Difficulty: "+difficulty+"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
@@ -212,7 +211,7 @@ public class ConnectFour{
         long difficulty;
 
         clearScreen();
-            System.out.println("*******MinMax No Prun*******");
+            System.out.println("***Monte Carlo Tree Search***");
             System.out.print("Depth/Difficulty (100-1000000): ");
             difficulty=/*TimeUnit.SECONDS.toNanos(*/in.nextInt();
 
@@ -220,13 +219,13 @@ public class ConnectFour{
         MonteCarloTreeSearch AI = new MonteCarloTreeSearch(difficulty);
 
         clearScreen();
-            System.out.println("*******MinMax No Prun*******");
+            System.out.println("***Monte Carlo Tree Search***");
             System.out.println("Mode:\n1)Player 1->You\n2)Player 1->AI\n3)Exit");
             player=in.nextInt();
         switch(player){
             case 1://X is Human AI is O, X play first
                 clearScreen();
-                    System.out.println("*******MinMax No Prun*******");
+                    System.out.println("***Monte Carlo Tree Search***");
                     System.out.println("Player 1 is Human");
                     game.setPlayer('O');//defines previous player as O so that X can start first
                 wait(1000);
@@ -234,7 +233,7 @@ public class ConnectFour{
             break;
             case 2: //O is AI Human is X, O plays first
                 clearScreen();
-                    System.out.println("*******MinMax No Prun*******");
+                    System.out.println("***Monte Carlo Tree Search***");
                     System.out.println("Player 1 is AI");
                     game.setPlayer('X');//defines previous player as X so that O(AI) can start first
                 wait(1000);
@@ -247,7 +246,7 @@ public class ConnectFour{
                 minMaxNoPrun(in);
             break;
         }
-        System.out.println("*******MinMax No Prun********");
+        System.out.println("***Monte Carlo Tree Search***");
         System.out.println("Difficulty: "+difficulty+"\n");
         if(player==1){
             System.out.println("| 1 | 2 | 3 | 4 | 5 | 6 | 7 |");
