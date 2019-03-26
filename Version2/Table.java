@@ -1,4 +1,84 @@
+
 import java.util.LinkedList;
+
+/*------------------------------------------------------------------------------
+Color Pick
+------------------------------------------------------------------------------*/
+class ConsoleColors {
+    // Reset
+    public static final String RESET = "\033[0m";  // Text Reset
+
+    // Regular Colors
+    public static final String BLACK = "\033[0;30m";   // BLACK
+    public static final String RED = "\033[0;31m";     // RED
+    public static final String GREEN = "\033[0;32m";   // GREEN
+    public static final String YELLOW = "\033[0;33m";  // YELLOW
+    public static final String BLUE = "\033[0;34m";    // BLUE
+    public static final String PURPLE = "\033[0;35m";  // PURPLE
+    public static final String CYAN = "\033[0;36m";    // CYAN
+    public static final String WHITE = "\033[0;37m";   // WHITE
+
+    // Bold
+    public static final String BLACK_BOLD = "\033[1;30m";  // BLACK
+    public static final String RED_BOLD = "\033[1;31m";    // RED
+    public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
+    public static final String YELLOW_BOLD = "\033[1;33m"; // YELLOW
+    public static final String BLUE_BOLD = "\033[1;34m";   // BLUE
+    public static final String PURPLE_BOLD = "\033[1;35m"; // PURPLE
+    public static final String CYAN_BOLD = "\033[1;36m";   // CYAN
+    public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
+
+    // Underline
+    public static final String BLACK_UNDERLINED = "\033[4;30m";  // BLACK
+    public static final String RED_UNDERLINED = "\033[4;31m";    // RED
+    public static final String GREEN_UNDERLINED = "\033[4;32m";  // GREEN
+    public static final String YELLOW_UNDERLINED = "\033[4;33m"; // YELLOW
+    public static final String BLUE_UNDERLINED = "\033[4;34m";   // BLUE
+    public static final String PURPLE_UNDERLINED = "\033[4;35m"; // PURPLE
+    public static final String CYAN_UNDERLINED = "\033[4;36m";   // CYAN
+    public static final String WHITE_UNDERLINED = "\033[4;37m";  // WHITE
+
+    // Background
+    public static final String BLACK_BACKGROUND = "\033[40m";  // BLACK
+    public static final String RED_BACKGROUND = "\033[41m";    // RED
+    public static final String GREEN_BACKGROUND = "\033[42m";  // GREEN
+    public static final String YELLOW_BACKGROUND = "\033[43m"; // YELLOW
+    public static final String BLUE_BACKGROUND = "\033[44m";   // BLUE
+    public static final String PURPLE_BACKGROUND = "\033[45m"; // PURPLE
+    public static final String CYAN_BACKGROUND = "\033[46m";   // CYAN
+    public static final String WHITE_BACKGROUND = "\033[47m";  // WHITE
+
+    // High Intensity
+    public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
+    public static final String RED_BRIGHT = "\033[0;91m";    // RED
+    public static final String GREEN_BRIGHT = "\033[0;92m";  // GREEN
+    public static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
+    public static final String BLUE_BRIGHT = "\033[0;94m";   // BLUE
+    public static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
+    public static final String CYAN_BRIGHT = "\033[0;96m";   // CYAN
+    public static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
+
+    // Bold High Intensity
+    public static final String BLACK_BOLD_BRIGHT = "\033[1;90m"; // BLACK
+    public static final String RED_BOLD_BRIGHT = "\033[1;91m";   // RED
+    public static final String GREEN_BOLD_BRIGHT = "\033[1;92m"; // GREEN
+    public static final String YELLOW_BOLD_BRIGHT = "\033[1;93m";// YELLOW
+    public static final String BLUE_BOLD_BRIGHT = "\033[1;94m";  // BLUE
+    public static final String PURPLE_BOLD_BRIGHT = "\033[1;95m";// PURPLE
+    public static final String CYAN_BOLD_BRIGHT = "\033[1;96m";  // CYAN
+    public static final String WHITE_BOLD_BRIGHT = "\033[1;97m"; // WHITE
+
+    // High Intensity backgrounds
+    public static final String BLACK_BACKGROUND_BRIGHT = "\033[0;100m";// BLACK
+    public static final String RED_BACKGROUND_BRIGHT = "\033[0;101m";// RED
+    public static final String GREEN_BACKGROUND_BRIGHT = "\033[0;102m";// GREEN
+    public static final String YELLOW_BACKGROUND_BRIGHT = "\033[0;103m";// YELLOW
+    public static final String BLUE_BACKGROUND_BRIGHT = "\033[0;104m";// BLUE
+    public static final String PURPLE_BACKGROUND_BRIGHT = "\033[0;105m"; // PURPLE
+    public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";  // CYAN
+    public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
+}
+
 
 /*------------------------------------------------------------------------------
 Play-Has the Row/Col of a play + its utility value
@@ -47,15 +127,19 @@ public class Table{
     private boolean game_over;
     private boolean out_of_bounds=false;
 
+    private String str; //for MTCS
+
     //Constructor
         public Table(){//constructor for starting game
             this.play=new Play();        //empty move
             this.player='-';             //no player
             this.champion='-';           //no champion
             this.table=new char[6][7];
+            this.str="";
             for(int i=0;i<6;i++){   //Form empty table
                 for(int j=0;j<7;j++){
                     this.table[i][j]='-';
+                    str+='-';
                 }
             }
         }
@@ -64,8 +148,12 @@ public class Table{
             this.player=copy.getPlayer();
             this.champion=copy.getChampion();
             this.table=copy.getTable();
+            this.str=copy.getString();
         }
     //Getters
+        public String getString(){
+            return this.str;
+        }
         public Play getPlay(){
             //Last play, to reach conf
             return play;
@@ -114,9 +202,11 @@ public class Table{
         }
         public void setOutOfBounds(boolean ob){this.out_of_bounds=ob;}
         public void setTable(char[][] table){
+            this.str="";
             for(int i=0;i<6;i++){
                 for(int j=0;j<7;j++){
                     this.table[i][j]=table[i][j];
+                    this.str+=table[i][j];
                 }
             }
         }
@@ -155,6 +245,13 @@ public class Table{
                     Table son=new Table(); //copies table
                     son.table=this.getTable();
                     son.makeNewPlay(i,player);
+                    son.str="";
+                    //Update string
+                    for(int j=0;j<6;j++){
+                        for(int k=0;k<7;k++){
+                            son.str+=son.table[j][k];
+                        }
+                    }
                     if(!son.isOutOfBounds())
                         descendents.addFirst(son);
                 }
@@ -324,9 +421,9 @@ public class Table{
                 for(int j=0;j<4;j++){
                     x=0;o=0;
                     for(int k=0;k<4;k++){
-                        if(table[i-k][j+k]=='X')
+                        if(table[i-k][j+k] == 'X')
                             x++;
-                        else if(table[i-k][j+k]=='O')
+                        else if(table[i-k][j+k] == 'O')
                             o++;
                     }
                     if(o==3 && x==0) u+=50;
@@ -342,13 +439,26 @@ public class Table{
         //print table
         public String toString(){
             //Overide
-            String s="\n\n";
+            String s="";
             for(int i=0;i<6;i++){
                 for(int j=0;j<7;j++){
-                    if(j!=6)//if it's not last column
-                        s+="| "+table[i][j]+" ";
-                    else
-                        s+="| "+table[i][j]+" |\n";
+                    if(j!=6){//if it's not last column
+                        if(table[i][j]=='X'){//AI
+                            s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" ";
+                        }
+                        else{
+                            s+="| "+ConsoleColors.WHITE+table[i][j]+ConsoleColors.RESET+" ";
+                        }
+                        //s+="| "+table[i][j]+" ";
+                    }
+                    else{
+                        if(table[i][j]=='X'){//AI
+                            s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" |\n";
+                        }
+                        else{
+                            s+="| "+ConsoleColors.WHITE+table[i][j]+ConsoleColors.RESET+" |\n";
+                        }
+                    }
                 }
             }
             return s;
