@@ -151,14 +151,14 @@ public  class MinMaxGUI extends JFrame{
                                 }
                             }
                             else{
-                                JOptionPane.showMessageDialog(null,"Colum full","Monte Carlo Choice",JOptionPane.OK_OPTION);
+                                JOptionPane.showMessageDialog(null,"Colum full","MinMax Choice",JOptionPane.OK_OPTION);
                             }
                         }
                         else if(game.isGameOver()){
-                            JOptionPane.showMessageDialog(null,"Game is Over","Monte Carlo Choice",JOptionPane.OK_OPTION);
+                            JOptionPane.showMessageDialog(null,"Game is Over","MinMax Choice",JOptionPane.OK_OPTION);
                         }
                         else{
-                            JOptionPane.showMessageDialog(null,"Not your Turn","Monte Carlo Choice",JOptionPane.OK_OPTION);
+                            JOptionPane.showMessageDialog(null,"Not your Turn","MinMaxo Choice",JOptionPane.OK_OPTION);
                             game.setPlayer('O');
                             Play AI_Play=AI.minMax(game);
                             addMove('O', AI_Play.getRow(), AI_Play.getCol());
