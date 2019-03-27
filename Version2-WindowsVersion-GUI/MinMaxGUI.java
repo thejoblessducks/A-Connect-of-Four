@@ -88,7 +88,7 @@ public  class MinMaxGUI extends JFrame{
                            else{max_depth=4;}
                            System.out.println("Depth: " + max_depth); 
                            picker.setVisible(false);
-                           AI=new MinMaxNoPrun(max_depth,'O');
+                           AI=new MinMaxNoPrun(max_depth);
                            createMinMaxGUI(app);
                        }
                    });

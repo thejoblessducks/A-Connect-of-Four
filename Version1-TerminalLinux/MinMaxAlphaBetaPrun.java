@@ -40,16 +40,15 @@ class MinMaxAlphaBetaPrun{
      *          if(v<beta): beta=v
      * 
      * It is important to refer that we will never call the minBeta, for we are AI
+     *      we will explore using MinMaxNoPrun
     **/
     private int max_depth;    //the higher the depth, the harer the game will be
-    private char player;      //Char thet defines the AI, Standart: 'O'
     private int nodes;        //Counter for nodes explored
     private MinMaxNoPrun minmax;
 
-    public MinMaxAlphaBetaPrun(int max_depth,char player){
+    public MinMaxAlphaBetaPrun(int max_depth){
         this.max_depth=max_depth;
-        this.player=player;
-        minmax=new MinMaxNoPrun(max_depth, player);
+        minmax=new MinMaxNoPrun(max_depth);
     }
 /*------------------------------------------------------------------------------
                         MinMax Alpha-Beta Prun Algorithm
@@ -65,7 +64,6 @@ class MinMaxAlphaBetaPrun{
         return p;
     }
     public Play max(Table tb,int depth,int alpha,int beta){
-        Random rand_play=new Random();
         if(tb.isGameOver() || depth == max_depth)
             return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
         
@@ -82,7 +80,7 @@ class MinMaxAlphaBetaPrun{
                     maxPlay.setUtility(p.getUtility());
                 }
                 else if(p.getUtility() == maxPlay.getUtility()){
-                    if(rand_play.nextInt(2)==0){
+                    if(new Random().nextInt(2)==0){
                         maxPlay.setRow(son.getPlay().getRow());
                         maxPlay.setCol(son.getPlay().getCol());
                         maxPlay.setUtility(p.getUtility());
