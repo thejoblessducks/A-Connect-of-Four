@@ -139,9 +139,9 @@ public  class MinMaxGUI extends JFrame{
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                         //System.exit(0);
                                     }else if(game.getChampion()=='O'){
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
