@@ -9,23 +9,24 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public  class MinMaxGUI extends JFrame{
+public  class MonteCarloGUI extends JFrame{
     private static final JButton[][] slots = new JButton[6][7];
     //private static final JPanel panel;
     static ImageIcon human=new ImageIcon("./Imgs/GREEN.gif");
     static ImageIcon ai=new ImageIcon("./Imgs/RED.gif");
     static ImageIcon empty=new ImageIcon("./Imgs/BLACK.gif");
 
-    private static int max_depth=4;
+    private static int max_nodes=100;
     private static Table game;
-    private static  MinMaxNoPrun AI;
+    private static  MonteCarloTreeSearch AI;
 
-    public MinMaxGUI(){
-        super("MinMax Connect4");
+    public MonteCarloGUI(){
+        super("Monte Carlo Tree Search Connect4");
         game=new Table();
         openPicker(this);
     }
-    public static void openPicker(MinMaxGUI app){
+    
+    public static void openPicker(MonteCarloGUI app){
         app.setVisible(false);
         JFrame picker = new JFrame("Chose Preference");
         picker.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,36 +66,35 @@ public  class MinMaxGUI extends JFrame{
             picker.add(ai_first);
             picker.add(human_first);
         //Add Depth Choser:
-            JTextField depth=new JTextField("Depth");
-                    depth.setBounds(150,30,70,30);
-                    depth.setFont(new Font("Serif", Font.BOLD, 20));
-            picker.add(depth);
+            JTextField nodes=new JTextField("Nodes",5);
+                    nodes.setBounds(150,30,70,30);
+                    nodes.setFont(new Font("Serif", Font.BOLD, 20));
+            picker.add(nodes);
         //Add Button
             JButton ok=new JButton("OK");
                 ok.setBounds(150,70,50,30);
                 ok.addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
-                           String s=depth.getText();
-                           if(!s.equals("Depth")){
-                               Scanner in=new Scanner(depth.getText());
+                           String s=nodes.getText();
+                           if(!s.equals("Nodes")){
+                               Scanner in=new Scanner(nodes.getText());
                                try{
                                    int i=in.nextInt();
-                                   max_depth=i;
+                                   max_nodes=i;
                                }catch(Exception ex){
-                                   max_depth=4;
+                                max_nodes=100;
                                }
                                in.close();
-                           }
-                           else{max_depth=4;}
-                           System.out.println("Depth: " + max_depth); 
-                           picker.setVisible(false);
-                           AI=new MinMaxNoPrun(max_depth,'O');
-                           createMinMaxGUI(app);
+                           }else{max_nodes=100;}
+                            System.out.println("Nodes: " + max_nodes);                                   
+                            picker.setVisible(false);
+                            AI=new MonteCarloTreeSearch(max_nodes);
+                            createMonteCarloGUI(app);
                        }
                    });
             picker.add(ok);
     }
-    public static void createMinMaxGUI(MinMaxGUI app){
+    public static void createMonteCarloGUI(MonteCarloGUI app){
         ImageIcon img = new ImageIcon("./Imgs/connect_icon.png");        
         try {app.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("./Imgs/Table.gif")))));}
         catch (IOException e) {e.printStackTrace();}
@@ -123,25 +123,25 @@ public  class MinMaxGUI extends JFrame{
                                         //System.exit(0);
                                     }
                                     else{
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                 }
                                 
                                 game.setPlayer('O');
-                                Play AI_Play=AI.minMax(game);
-                                addMove('O', AI_Play.getRow(), AI_Play.getCol());
-                                game.makeNewPlay(AI_Play.getCol(),'O');
+                                int AI_Play=AI.MCTS(game);
+                                addMove('O', game.getLastFreeRowPosition(AI_Play), AI_Play);
+                                game.makeNewPlay(AI_Play,'O');
                                 if(game.isGameOver()){
                                     if(game.getChampion()=='X'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                         //System.exit(0);
                                     }else if(game.getChampion()=='O'){
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
@@ -160,9 +160,9 @@ public  class MinMaxGUI extends JFrame{
                         else{
                             JOptionPane.showMessageDialog(null,"Not your Turn","MinMax Choice",JOptionPane.OK_OPTION);
                             game.setPlayer('O');
-                            Play AI_Play=AI.minMax(game);
-                            addMove('O', AI_Play.getRow(), AI_Play.getCol());
-                            game.makeNewPlay(AI_Play.getCol(),'O');
+                            int AI_Play=AI.MCTS(game);
+                            addMove('O', game.getLastFreeRowPosition(AI_Play), AI_Play);
+                            game.makeNewPlay(AI_Play,'O');
                             if(game.isGameOver()){
                                 if(game.getChampion()=='X'){
                                     //app.setVisible(false);
@@ -188,9 +188,9 @@ public  class MinMaxGUI extends JFrame{
 
         if(game.getPlayer()=='X'){
             game.setPlayer('O');
-            Play AI_Play=AI.minMax(game);
-            addMove('O', AI_Play.getRow(), AI_Play.getCol());
-            game.makeNewPlay(AI_Play.getCol(),'O');
+            int AI_Play=AI.MCTS(game);
+            addMove('O', game.getLastFreeRowPosition(AI_Play), AI_Play);
+            game.makeNewPlay(AI_Play,'O');
         }
         app.pack();    
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -207,12 +207,10 @@ public  class MinMaxGUI extends JFrame{
         if(player=='X'){//Human
             slots[row][col].setIcon(human);
             slots[row][col].setBounds(20+75*col,20+75*row,human.getIconWidth(),human.getIconHeight());
-            //slots[row][col].setEnabled(false);
         }
         else if(player=='O'){//AI
             slots[row][col].setIcon(ai);
             slots[row][col].setBounds(20+75*col,20+75*row,ai.getIconWidth(),ai.getIconHeight());
-            //slots[row][col].setEnabled(false);
         }
     }
     public static void main(String[] args) {
@@ -221,6 +219,6 @@ public  class MinMaxGUI extends JFrame{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Couldn't Open","Connect4",JOptionPane.OK_OPTION);
         }
-        new MinMaxGUI();
+        new AlphaBetaGUI();
     }
 }
