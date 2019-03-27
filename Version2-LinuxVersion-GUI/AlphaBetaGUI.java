@@ -88,7 +88,7 @@ public  class AlphaBetaGUI extends JFrame{
                            }else{max_depth=4;}
                             System.out.println("Depth: " + max_depth);
                             picker.setVisible(false);
-                            AI=new MinMaxAlphaBetaPrun(max_depth);
+                            AI=new MinMaxAlphaBetaPrun(max_depth,'O');
                             createAlphaBetaGUI(app);
                        }
                    });

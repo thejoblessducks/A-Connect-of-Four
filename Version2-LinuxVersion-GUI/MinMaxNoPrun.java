@@ -6,19 +6,21 @@ class MinMaxNoPrun{
      * This class is designed to apply the MinMax algorithm without prunning
      *      there is a possibility that we will never find a solution, or it
      *      will take too long, we don't want that, as such, we will, establish
-     *      a resource cap, in this case, the depth os the search, the higher 
-     *      the depth the harder the game will be, and the longer it will take 
+     *      a resource cap, in this case, the depth os the search, the higher
+     *      the depth the harder the game will be, and the longer it will take
      *      for the AI to chose
      * This class will store only the maximum depth of search as well as the
      *      nodes that were created in each AI decision
      */
     private int max_depth_pru;  //Defines the maximum depth of search
                                 //The higher the depth the higher the difficulty
+    private char player;
     private int nodes;          //counter for nodes explored
 
-    public MinMaxNoPrun(int m_depth){
+    public MinMaxNoPrun(int m_depth,char player){
         //Here, player is the AI player
         this.max_depth_pru=m_depth;
+        this.player=player;
     }
 
     public int getNodes(){return nodes;}
@@ -30,9 +32,9 @@ class MinMaxNoPrun{
             /*
              * The min max algorithm will call the min and max one after the
              *      other until a solution is produced.
-             * Note that we start with the max, for we want to maximize the AI 
+             * Note that we start with the max, for we want to maximize the AI
              *      score and minimize the Human score
-             * In this method we also count the time it takes to produce an 
+             * In this method we also count the time it takes to produce an
              *      answer as well as the number of nodes created in the search
              */
             nodes=0;
@@ -45,25 +47,23 @@ class MinMaxNoPrun{
         return p;
     }
     public Play max(Table tb,int depth){
-        //either we have reached resource cap or terminal state
-        if(tb.isGameOver() || depth == max_depth_pru) 
+        Random rand_play = new Random();
+        if(tb.isGameOver() || depth == max_depth_pru)
            return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
 
         Play maxPlay = new Play(Integer.MIN_VALUE);//we nwant to maximize X value
-        //so we define the lowest possible value as starter
         for(Table son : tb.getDescendents('O')){
-            nodes++;                                //created a new node
-            Play p = min(son,depth+1);              //search in next level
+            nodes++;
+            Play p = min(son,depth+1);
             if(p.getUtility() > maxPlay.getUtility()){
-                //Found new best result=>Update maxPLay
                 maxPlay.setRow(son.getPlay().getRow());
                 maxPlay.setCol(son.getPlay().getCol());
                 maxPlay.setUtility(p.getUtility());
             }
             else if(p.getUtility() == maxPlay.getUtility()){
-                //Found a play with the same utility
+                //Found a move with the same utility
                 //Random pick
-                if(new Random().nextInt(2) == 0){
+                if(rand_play.nextInt(2) == 0){
                     maxPlay.setRow(son.getPlay().getRow());
                     maxPlay.setCol(son.getPlay().getCol());
                     maxPlay.setUtility(p.getUtility());
@@ -73,14 +73,14 @@ class MinMaxNoPrun{
         return maxPlay;
     }
     public Play min(Table tb,int depth){
-        //either we have reached resource cap or terminal state
+        Random rand_play = new Random();
         if(tb.isGameOver() || depth == max_depth_pru){
             Play p = new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
             return p;
         }
         Play minPlay = new Play(Integer.MAX_VALUE);
         for(Table son : tb.getDescendents('X')){
-            nodes++; 
+            nodes++;
             Play p = max(son,depth+1);
             if(p.getUtility() < minPlay.getUtility()){
                 minPlay.setRow(son.getPlay().getRow());
@@ -88,9 +88,9 @@ class MinMaxNoPrun{
                 minPlay.setUtility(p.getUtility());
             }
             else if(p.getUtility() == minPlay.getUtility()){
-                //Found a play with the same utility
+                //Found a move with the same utility
                 //Random pick
-                if(new Random().nextInt(2) == 0){
+                if(rand_play.nextInt(2) == 0){
                     minPlay.setRow(son.getPlay().getRow());
                     minPlay.setCol(son.getPlay().getCol());
                     minPlay.setUtility(p.getUtility());

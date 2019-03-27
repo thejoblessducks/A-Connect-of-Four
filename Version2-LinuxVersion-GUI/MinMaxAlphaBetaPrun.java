@@ -3,21 +3,21 @@ import java.util.Random;
 
 class MinMaxAlphaBetaPrun{
     /* This algorithm is an improvement over the minMax search algorithm
-     * 
+     *
      * In a normal game, if our opponent is an optimal player, some branches of
      *    our possible plays will never be reached, hence we can prun them
-     * In theory, the alpha-beta prunning can optimistically reduce the time 
-     *    complexity of a minMax algorithm in half the depth O(b^d)==>O(b^d/2) 
+     * In theory, the alpha-beta prunning can optimistically reduce the time
+     *    complexity of a minMax algorithm in half the depth O(b^d)==>O(b^d/2)
      * The prunning can be made in a:
-     *    a) Max level if we store the maximum utility so far, as well as the 
+     *    a) Max level if we store the maximum utility so far, as well as the
      *           smalles utility value of the state
-     *    b) Min level if we store the minimum utility so far, as well as the 
+     *    b) Min level if we store the minimum utility so far, as well as the
      *           biggest utiyility of the state
      *    That is, when in a max lvel (AI turn) if this.alpha>=parent.beta => return
      *         when in a min level (Humam turn) if this.beta <=parent.alpha => return
-     * 
+     *
      * To support this method we will use the MinMaxNoPrun Class
-     *  
+     *
      * Note the pseudocode:
      *  minMaxAlphaBeta(state):
      *      return maxAlpha(state,Intger.MIN_VALUE,Integer.MAX_VALUE)
@@ -38,17 +38,18 @@ class MinMaxAlphaBetaPrun{
      *          if(utility(play)<v): v=utility(play)
      *          if(v<=alpha): return v
      *          if(v<beta): beta=v
-     * 
+     *
      * It is important to refer that we will never call the minBeta, for we are AI
-     *      we will explore using MinMaxNoPrun
     **/
     private int max_depth;    //the higher the depth, the harer the game will be
+    private char player;      //Char thet defines the AI, Standart: 'O'
     private int nodes;        //Counter for nodes explored
     private MinMaxNoPrun minmax;
 
-    public MinMaxAlphaBetaPrun(int max_depth){
+    public MinMaxAlphaBetaPrun(int max_depth,char player){
         this.max_depth=max_depth;
-        minmax=new MinMaxNoPrun(max_depth);
+        this.player=player;
+        minmax=new MinMaxNoPrun(max_depth, player);
     }
 /*------------------------------------------------------------------------------
                         MinMax Alpha-Beta Prun Algorithm
@@ -64,9 +65,10 @@ class MinMaxAlphaBetaPrun{
         return p;
     }
     public Play max(Table tb,int depth,int alpha,int beta){
+        Random rand_play=new Random();
         if(tb.isGameOver() || depth == max_depth)
             return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
-        
+
         Play maxPlay = new Play(Integer.MIN_VALUE);
         for(Table son : tb.getDescendents('O')){
             minmax.setNodes(0);
@@ -80,7 +82,7 @@ class MinMaxAlphaBetaPrun{
                     maxPlay.setUtility(p.getUtility());
                 }
                 else if(p.getUtility() == maxPlay.getUtility()){
-                    if(new Random().nextInt(2)==0){
+                    if(rand_play.nextInt(2)==0){
                         maxPlay.setRow(son.getPlay().getRow());
                         maxPlay.setCol(son.getPlay().getCol());
                         maxPlay.setUtility(p.getUtility());

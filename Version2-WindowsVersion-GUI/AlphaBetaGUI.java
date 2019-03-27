@@ -25,7 +25,7 @@ public  class AlphaBetaGUI extends JFrame{
         game=new Table();
         openPicker(this);
     }
-    
+
     public static void openPicker(AlphaBetaGUI app){
         app.setVisible(false);
         JFrame picker = new JFrame("Chose Preference");
@@ -36,7 +36,7 @@ public  class AlphaBetaGUI extends JFrame{
         picker.setLayout(null);
         picker.setIconImage(new ImageIcon("./Imgs/connect_icon.png").getImage());
         picker.setVisible(true);
-           
+
         game.setPlayer('O');
         //Add First Player Chooser
             JRadioButton ai_first,human_first;
@@ -58,7 +58,7 @@ public  class AlphaBetaGUI extends JFrame{
                     AbstractButton aButton = (AbstractButton) actionEvent.getSource();
                     System.out.println("Selected: " + aButton.getText());
                     if(aButton.getText().equals("AI Plays First")){game.setPlayer('X');}
-                    else if(aButton.getText().equals("Human Plays First")){game.setPlayer('O');}              
+                    else if(aButton.getText().equals("Human Plays First")){game.setPlayer('O');}
                 }
             };
             human_first.addActionListener(sliceActionListener);
@@ -86,16 +86,16 @@ public  class AlphaBetaGUI extends JFrame{
                                }
                                in.close();
                            }else{max_depth=4;}
-                            System.out.println("Depth: " + max_depth);                                   
+                            System.out.println("Depth: " + max_depth);
                             picker.setVisible(false);
-                            AI=new MinMaxAlphaBetaPrun(max_depth);
+                            AI=new MinMaxAlphaBetaPrun(max_depth,'O');
                             createAlphaBetaGUI(app);
                        }
                    });
             picker.add(ok);
     }
     public static void createAlphaBetaGUI(AlphaBetaGUI app){
-        ImageIcon img = new ImageIcon("./Imgs/connect_icon.png");        
+        ImageIcon img = new ImageIcon("./Imgs/connect_icon.png");
         try {app.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("./Imgs/Table.gif")))));}
         catch (IOException e) {e.printStackTrace();}
         for (int i = 0; i < 6; i++) {
@@ -105,7 +105,7 @@ public  class AlphaBetaGUI extends JFrame{
                 slots[r][c]=new JButton();
                 slots[r][c].setIcon(empty);
                 slots[r][c].setBounds(20+75*c,20+75*r,empty.getIconWidth(),empty.getIconHeight());
-                slots[r][c].addActionListener(new ActionListener(){                
+                slots[r][c].addActionListener(new ActionListener(){
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (!game.isGameOver() && game.getPlayer()=='O'){
@@ -116,19 +116,19 @@ public  class AlphaBetaGUI extends JFrame{
                                     if(game.getChampion()=='X'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }
                                 }
-                                
+
                                 game.setPlayer('O');
                                 Play AI_Play=AI.alphaBeta(game);
                                 addMove('O', AI_Play.getRow(), AI_Play.getCol());
@@ -137,16 +137,16 @@ public  class AlphaBetaGUI extends JFrame{
                                     if(game.getChampion()=='X'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                        //System.exit(0);
+                                        System.exit(0);
                                     }
                                 }
                             }
@@ -167,16 +167,16 @@ public  class AlphaBetaGUI extends JFrame{
                                 if(game.getChampion()=='X'){
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
-                                    //System.exit(0);
+                                    System.exit(0);
                                 }else if(game.getChampion()=='O'){
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                    //System.exit(0);
+                                    System.exit(0);
                                 }
                                 else{
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                    //System.exit(0);
+                                    System.exit(0);
                                 }
                             }
                         }
@@ -192,7 +192,7 @@ public  class AlphaBetaGUI extends JFrame{
             addMove('O', AI_Play.getRow(), AI_Play.getCol());
             game.makeNewPlay(AI_Play.getCol(),'O');
         }
-        app.pack();    
+        app.pack();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setResizable(false);
         app.setLocationRelativeTo(null); //center

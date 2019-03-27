@@ -31,7 +31,7 @@ public class ConnectFour{
             System.out.print("Depth/Difficulty: ");
             difficulty=in.nextInt();
 
-        MinMaxNoPrun AI = new MinMaxNoPrun(difficulty);
+        MinMaxNoPrun AI = new MinMaxNoPrun(difficulty,'O');
         Table game = new Table();
 
         clearScreen();
@@ -122,7 +122,7 @@ public class ConnectFour{
             System.out.print("Depth/Difficulty: ");
             difficulty=in.nextInt();
 
-        MinMaxAlphaBetaPrun AI = new MinMaxAlphaBetaPrun(difficulty);
+        MinMaxAlphaBetaPrun AI = new MinMaxAlphaBetaPrun(difficulty,'O');
         Table game = new Table();
 
         clearScreen();
