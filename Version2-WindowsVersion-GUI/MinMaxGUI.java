@@ -123,9 +123,9 @@ public  class MinMaxGUI extends JFrame{
                                         //System.exit(0);
                                     }
                                     else{
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                 }
                                 
