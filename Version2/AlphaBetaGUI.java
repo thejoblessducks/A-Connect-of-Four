@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 
-public  class MinMaxGUI extends JFrame{
+public  class AlphaBetaGUI extends JFrame{
     private static final JButton[][] slots = new JButton[6][7];
     //private static final JPanel panel;
     static ImageIcon human=new ImageIcon("./Imgs/GREEN.gif");
@@ -18,14 +18,15 @@ public  class MinMaxGUI extends JFrame{
 
     private static int max_depth=4;
     private static Table game;
-    private static  MinMaxNoPrun AI;
+    private static  MinMaxAlphaBetaPrun AI;
 
-    public MinMaxGUI(){
-        super("MinMax Connect4");
+    public AlphaBetaGUI(){
+        super("MinMax Alpha-Beta Connect4");
         game=new Table();
         openPicker(this);
     }
-    public static void openPicker(MinMaxGUI app){
+    
+    public static void openPicker(AlphaBetaGUI app){
         app.setVisible(false);
         JFrame picker = new JFrame("Chose Preference");
         picker.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,7 +66,7 @@ public  class MinMaxGUI extends JFrame{
             picker.add(ai_first);
             picker.add(human_first);
         //Add Depth Choser:
-            JTextField depth=new JTextField("Depth");
+            JTextField depth=new JTextField("Depth",5);
                     depth.setBounds(150,30,70,30);
                     depth.setFont(new Font("Serif", Font.BOLD, 20));
             picker.add(depth);
@@ -81,20 +82,19 @@ public  class MinMaxGUI extends JFrame{
                                    int i=in.nextInt();
                                    max_depth=i;
                                }catch(Exception ex){
-                                   max_depth=4;
+                                    max_depth=4;
                                }
                                in.close();
-                           }
-                           else{max_depth=4;}
-                           System.out.println("Depth: " + max_depth); 
-                           picker.setVisible(false);
-                           AI=new MinMaxNoPrun(max_depth,'O');
-                           createMinMaxGUI(app);
+                           }else{max_depth=4;}
+                            System.out.println("Depth: " + max_depth);                                   
+                            picker.setVisible(false);
+                            AI=new MinMaxAlphaBetaPrun(max_depth,'O');
+                            createAlphaBetaGUI(app);
                        }
                    });
             picker.add(ok);
     }
-    public static void createMinMaxGUI(MinMaxGUI app){
+    public static void createAlphaBetaGUI(AlphaBetaGUI app){
         ImageIcon img = new ImageIcon("./Imgs/connect_icon.png");        
         try {app.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("./Imgs/Table.gif")))));}
         catch (IOException e) {e.printStackTrace();}
@@ -123,14 +123,14 @@ public  class MinMaxGUI extends JFrame{
                                         //System.exit(0);
                                     }
                                     else{
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                 }
                                 
                                 game.setPlayer('O');
-                                Play AI_Play=AI.minMax(game);
+                                Play AI_Play=AI.alphaBeta(game);
                                 addMove('O', AI_Play.getRow(), AI_Play.getCol());
                                 game.makeNewPlay(AI_Play.getCol(),'O');
                                 if(game.isGameOver()){
@@ -139,9 +139,9 @@ public  class MinMaxGUI extends JFrame{
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                         //System.exit(0);
                                     }else if(game.getChampion()=='O'){
-                                        app.setVisible(false);
+                                        //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
-                                        System.exit(0);
+                                        //System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
@@ -160,7 +160,7 @@ public  class MinMaxGUI extends JFrame{
                         else{
                             JOptionPane.showMessageDialog(null,"Not your Turn","MinMax Choice",JOptionPane.OK_OPTION);
                             game.setPlayer('O');
-                            Play AI_Play=AI.minMax(game);
+                            Play AI_Play=AI.alphaBeta(game);
                             addMove('O', AI_Play.getRow(), AI_Play.getCol());
                             game.makeNewPlay(AI_Play.getCol(),'O');
                             if(game.isGameOver()){
@@ -188,7 +188,7 @@ public  class MinMaxGUI extends JFrame{
 
         if(game.getPlayer()=='X'){
             game.setPlayer('O');
-            Play AI_Play=AI.minMax(game);
+            Play AI_Play=AI.alphaBeta(game);
             addMove('O', AI_Play.getRow(), AI_Play.getCol());
             game.makeNewPlay(AI_Play.getCol(),'O');
         }
@@ -207,12 +207,10 @@ public  class MinMaxGUI extends JFrame{
         if(player=='X'){//Human
             slots[row][col].setIcon(human);
             slots[row][col].setBounds(20+75*col,20+75*row,human.getIconWidth(),human.getIconHeight());
-            //slots[row][col].setEnabled(false);
         }
         else if(player=='O'){//AI
             slots[row][col].setIcon(ai);
             slots[row][col].setBounds(20+75*col,20+75*row,ai.getIconWidth(),ai.getIconHeight());
-            //slots[row][col].setEnabled(false);
         }
     }
     public static void main(String[] args) {
@@ -221,6 +219,6 @@ public  class MinMaxGUI extends JFrame{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Couldn't Open","Connect4",JOptionPane.OK_OPTION);
         }
-        new MinMaxGUI();
+        new AlphaBetaGUI();
     }
 }

@@ -22,8 +22,22 @@ public class Connect4GUI extends JFrame{
             });
         alphabeta=new JButton("Min Max-Alpha Beta Algorithm");
             alphabeta.setBounds(45,115,220,55);
+            alphabeta.addActionListener(new ActionListener(){            
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    app.setVisible(false);
+                    new AlphaBetaGUI();
+                }
+            });
         montecarlo=new JButton("Monte Carlo Tree Search Algorithm");
             montecarlo.setBounds(45,190,220,55);
+            montecarlo.addActionListener(new ActionListener(){            
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    app.setVisible(false);
+                    new MonteCarloGUI();
+                }
+            });
         add(minmax);
         add(alphabeta);
         add(montecarlo);
