@@ -151,14 +151,14 @@ public  class AlphaBetaGUI extends JFrame{
                                 }
                             }
                             else{
-                                JOptionPane.showMessageDialog(null,"Colum full","MinMax Choice",JOptionPane.OK_OPTION);
+                                JOptionPane.showMessageDialog(null,"Colum full","MinMax Alpha-Beta Choice",JOptionPane.OK_OPTION);
                             }
                         }
                         else if(game.isGameOver()){
-                            JOptionPane.showMessageDialog(null,"Game is Over","MinMax Choice",JOptionPane.OK_OPTION);
+                            JOptionPane.showMessageDialog(null,"Game is Over","MinMax Alpha-Beta Choice",JOptionPane.OK_OPTION);
                         }
                         else{
-                            JOptionPane.showMessageDialog(null,"Not your Turn","MinMax Choice",JOptionPane.OK_OPTION);
+                            JOptionPane.showMessageDialog(null,"Not your Turn","MinMax Alpha-Beta Choice",JOptionPane.OK_OPTION);
                             game.setPlayer('O');
                             Play AI_Play=AI.alphaBeta(game);
                             addMove('O', AI_Play.getRow(), AI_Play.getCol());
