@@ -1,10 +1,18 @@
-
 import java.util.LinkedList;
 
 /*------------------------------------------------------------------------------
 Color Pick
 ------------------------------------------------------------------------------*/
 class ConsoleColors {
+    /*
+     * This Class has some instructions designed to change the linux(ubuntu) 
+     *      character colors, it won't work on Windows and we can't guarantee
+     *      that it will work on other Linux OS
+     * Note that it is important to RESET the colour of the terminal characters
+     *      otherwise, you will set all chars to that color
+     * For our class Table we will mostly use RED(for AI), GREEN_BOLD(for Human)
+     *      and WHITE(for draw) 
+     */
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -26,6 +34,25 @@ class ConsoleColors {
 Play-Has the Row/Col of a play + its utility value
 ------------------------------------------------------------------------------*/
 class Play{
+    /*
+     * This class was designed to store the main values of a play, independently
+     *      of the class Table, as to enable the backtracking process
+     * It is composed of 3 Integer values:row,col and utility, the row will
+     *      store the row in the class Table that was changed for this move, col
+     *      will store the col in the class Table that was changed in this move
+     *      and utility will serve as a storage for the utility of a TERMINAL 
+     *      state, therefore, it will only have a real value(!=-1) when, in our
+     *      search method we either reach a terminal state(game over) or a 
+     *      resource cap(we will establish a node cap, but a time cap is equally
+     *      effective)
+     * In order to fully use this class we will implement 3 constructors, each
+     *      with its own purpose, the first will take all 3 values, for when
+     *      we want to update the table as well as the utility, the second will
+     *      take only the row and col of the move that was made either by Human
+     *      or AI, this constructor will be used mostly during the expansion
+     *      phases of the algorithms, the last will only take the utility, 
+     *      and thus, will only be used for backtracking information
+     */
     private int row,col;//row and col where play was made
     private int utility;//utility, will change in minmax backtrack
 
@@ -62,6 +89,71 @@ class Play{
 Table-Represents the Game Configuration
 ------------------------------------------------------------------------------*/
 public class Table{
+    /*
+     * This class was designed to represent the game, therefore it must contain
+     *      vital information about the game state that it represents, such as
+     *      its configuration and the player that last played, arriving at this
+     *      configuration.
+     * It is composed of 6 variables:
+     *      ->a variable play, that stores the play that produced this 
+     *          configuration;
+     *      ->a variable player, that stores the player that made the last play;
+     *      ->a variables champion, that will only be changed in terminal state,
+     *          and will store the player that managed to win the game in a
+     *          certain branch of search
+     *      ->a matrix/table of char, with the purpose of storing the physical
+     *          positions of each cell(a cell can be empt,'-', a cell of Human
+     *          player,'X' or a cell of AI player,'O');
+     *      ->a variable gameover, that returns true if we finished the game
+     *      ->a variable out_of_bonds, will be true if player tries to access,
+     *          an invalid position, this will come in handy during in the
+     *          Version1 of this game
+     * We then implement 2 types of constructors, one that has no parameters,
+     *      and so, is the initiating state, and a second constructor that takes
+     *      an existing copy and independently clones it, in order for us to
+     *      operate on it without affecting the previous one.
+     * 
+     * As for functions, we have the standart getters and setters, and then have
+     *      11 functions:
+     *      ->A toString method, to print the colored table;
+     *      ->A getLastFreeRowPosition that, provided a column c, it searches 
+     *          that sepecific column in the table untill it finds the last free
+     *          cell, counting from the bottom;
+     *      ->A isColumnFull that, given a column c, it will check it thet is
+     *          no free cell in that column, for that it will only have to see if
+     *          the first row in that column if equal or not to the empty cell
+     *          when we use the getLastFreePosition, we will alwas invoke this
+     *          method first, in order to protect the program;
+     *      ->A HasWin method, that will transverse the table searching for any
+     *          consecutive non empty equal cells, when it finds 4 in any line 
+     *          it sets the champion as the player that as those cells
+     *      ->A isGameOver method, that applies the HasWin method, it gets any
+     *          champion returns true for one player managed to make 4 in line
+     *          if has no win, then it will transverse the table in search of an 
+     *          empty cell, for if there are no winners but there is at least 
+     *          one empty cell, then there is one more play to be made, if all
+     *          fails, then there are no winners and no more possible plays, as 
+     *          such the game is over;
+     *      ->An Utility function, designed to attest the value of a state, if 
+     *          the state is terminal it returns +-512 depending on the winning
+     *          player, if it's not a terminal state, then it evaluates the 
+     *          table based on the following rules (note that the utility will 
+     *          give positive values for the AI player,'O', and negative for the
+     *          Human player,'X'):
+     *              »+50 if AI has 3 cells and Human none;
+     *              »+10 if AI has 2 cells and Human none;
+     *              »+1 if AI has 1 cell and Human none;
+     *              »the symmetric values for the opposite conditions;
+     *          This utility function is composed of 4 child functions, each for
+     *          the respective direction;
+     *      ->A getDescendents method that generates a list of all the table 
+     *          states, produced by application of an action in the parent table
+     *          (an action as a limit of 6, where each value,0-6, is the column
+     *          where a new cell will be placed);
+     *      ->A makePlay method, that given a player, and a desired column, will
+     *          apply the move to the table and update the player to the given one
+     * 
+     */
     private Play play;             //saves the choice of move to reach this play
     private char player;           //saves the previous player
     private char champion;         //saves the winning player
