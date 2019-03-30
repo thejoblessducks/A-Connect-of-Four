@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//Suported by //Suported by http://web.mit.edu/6.005/www/sp14/psets/ps4/java-6-tutorial/components.html
 public class Connect4GUI extends JFrame{
     private JButton minmax,alphabeta,montecarlo;
 

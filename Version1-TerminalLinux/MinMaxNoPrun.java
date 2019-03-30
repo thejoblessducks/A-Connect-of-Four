@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.Random;
 
 class MinMaxNoPrun{
     /*
@@ -14,13 +13,11 @@ class MinMaxNoPrun{
      */
     private int max_depth_pru;  //Defines the maximum depth of search
                                 //The higher the depth the higher the difficulty
-    private char player;
     private int nodes;          //counter for nodes explored
 
-    public MinMaxNoPrun(int m_depth,char player){
+    public MinMaxNoPrun(int m_depth){
         //Here, player is the AI player
         this.max_depth_pru=m_depth;
-        this.player=player;
     }
 
     public int getNodes(){return nodes;}
@@ -28,6 +25,7 @@ class MinMaxNoPrun{
 /*------------------------------------------------------------------------------
                             Min Max Algorithm
 ------------------------------------------------------------------------------*/
+//adaptation of https://www.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html
     public Play minMax(Table tb){
             /*
              * The min max algorithm will call the min and max one after the
@@ -47,7 +45,6 @@ class MinMaxNoPrun{
         return p;
     }
     public Play max(Table tb,int depth){
-        Random rand_play = new Random();
         if(tb.isGameOver() || depth == max_depth_pru)
            return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
 
@@ -60,20 +57,10 @@ class MinMaxNoPrun{
                 maxPlay.setCol(son.getPlay().getCol());
                 maxPlay.setUtility(p.getUtility());
             }
-            else if(p.getUtility() == maxPlay.getUtility()){
-                //Found a move with the same utility
-                //Random pick
-                if(rand_play.nextInt(2) == 0){
-                    maxPlay.setRow(son.getPlay().getRow());
-                    maxPlay.setCol(son.getPlay().getCol());
-                    maxPlay.setUtility(p.getUtility());
-                }
-            }
         }
         return maxPlay;
     }
     public Play min(Table tb,int depth){
-        Random rand_play = new Random();
         if(tb.isGameOver() || depth == max_depth_pru){
             Play p = new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
             return p;
@@ -86,15 +73,6 @@ class MinMaxNoPrun{
                 minPlay.setRow(son.getPlay().getRow());
                 minPlay.setCol(son.getPlay().getCol());
                 minPlay.setUtility(p.getUtility());
-            }
-            else if(p.getUtility() == minPlay.getUtility()){
-                //Found a move with the same utility
-                //Random pick
-                if(rand_play.nextInt(2) == 0){
-                    minPlay.setRow(son.getPlay().getRow());
-                    minPlay.setCol(son.getPlay().getCol());
-                    minPlay.setUtility(p.getUtility());
-                }
             }
         }
         return minPlay;

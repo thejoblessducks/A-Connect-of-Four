@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
+//Suported by //Suported by http://web.mit.edu/6.005/www/sp14/psets/ps4/java-6-tutorial/components.html
 public  class MinMaxGUI extends JFrame{
     private static final JButton[][] slots = new JButton[6][7];
     //private static final JPanel panel;
@@ -117,17 +117,20 @@ public  class MinMaxGUI extends JFrame{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("You WIN!!!!");
                                         System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("You Lose :(");
                                         System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("Draw :|");
                                         System.exit(0);
                                     }
                                 }
@@ -141,17 +144,20 @@ public  class MinMaxGUI extends JFrame{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("You WIN!!!!");
                                         System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("You Lose :(");
                                         System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
                                         System.out.println(game);
+                                        System.out.println("Draw :|");
                                         System.exit(0);
                                     }
                                 }
@@ -174,17 +180,20 @@ public  class MinMaxGUI extends JFrame{
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
                                     System.out.println(game);
+                                    System.out.println("You WIN!!!!");
                                     System.exit(0);
                                 }else if(game.getChampion()=='O'){
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
                                     System.out.println(game);
+                                    System.out.println("You Lose :(");
                                     System.exit(0);
                                 }
                                 else{
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
                                     System.out.println(game);
+                                    System.out.println("Draw :|");
                                     System.exit(0);
                                 }
                             }
