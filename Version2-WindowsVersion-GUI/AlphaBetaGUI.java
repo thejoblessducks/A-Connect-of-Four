@@ -116,15 +116,18 @@ public  class AlphaBetaGUI extends JFrame{
                                     if(game.getChampion()=='X'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }
                                 }
@@ -137,15 +140,18 @@ public  class AlphaBetaGUI extends JFrame{
                                     if(game.getChampion()=='X'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }else if(game.getChampion()=='O'){
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }
                                     else{
                                         //app.setVisible(false);
                                         JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
+                                        System.out.println(game);
                                         System.exit(0);
                                     }
                                 }
@@ -167,15 +173,18 @@ public  class AlphaBetaGUI extends JFrame{
                                 if(game.getChampion()=='X'){
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You Won!!!","Game Over",JOptionPane.OK_OPTION);
+                                    System.out.println(game);
                                     System.exit(0);
                                 }else if(game.getChampion()=='O'){
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"You lost :(","Game Over",JOptionPane.OK_OPTION);
+                                    System.out.println(game);
                                     System.exit(0);
                                 }
                                 else{
                                     //app.setVisible(false);
                                     JOptionPane.showMessageDialog(null,"Draw!","Game Over",JOptionPane.OK_OPTION);
+                                    System.out.println(game);
                                     System.exit(0);
                                 }
                             }

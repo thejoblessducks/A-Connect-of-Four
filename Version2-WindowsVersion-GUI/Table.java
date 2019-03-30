@@ -1,36 +1,6 @@
 import java.util.LinkedList;
 
 /*------------------------------------------------------------------------------
-Color Pick
-------------------------------------------------------------------------------*/
-class ConsoleColors {
-    /*
-     * This Class has some instructions designed to change the linux(ubuntu) 
-     *      character colors, it won't work on Windows and we can't guarantee
-     *      that it will work on other Linux OS
-     * Note that it is important to RESET the colour of the terminal characters
-     *      otherwise, you will set all chars to that color
-     * For our class Table we will mostly use RED(for AI), GREEN_BOLD(for Human)
-     *      and WHITE(for draw) 
-     */
-    // Reset
-    public static final String RESET = "\033[0m";  // Text Reset
-
-    // Regular Colors
-    public static final String BLACK = "\033[0;30m";   // BLACK
-    public static final String RED = "\033[0;31m";     // RED
-    public static final String GREEN = "\033[0;32m";   // GREEN
-    public static final String YELLOW = "\033[0;33m";  // YELLOW
-    public static final String WHITE = "\033[0;37m";   // WHITE
-
-    // Bold
-    public static final String RED_BOLD = "\033[1;31m";    // RED
-    public static final String GREEN_BOLD = "\033[1;32m";  // GREEN
-    public static final String WHITE_BOLD = "\033[1;37m";  // WHITE
-}
-
-
-/*------------------------------------------------------------------------------
 Play-Has the Row/Col of a play + its utility value
 ------------------------------------------------------------------------------*/
 class Play{
@@ -104,7 +74,6 @@ public class Table{
      *      ->a matrix/table of char, with the purpose of storing the physical
      *          positions of each cell(a cell can be empt,'-', a cell of Human
      *          player,'X' or a cell of AI player,'O');
-     *      ->a variable gameover, that returns true if we finished the game
      *      ->a variable out_of_bonds, will be true if player tries to access,
      *          an invalid position, this will come in handy during in the
      *          Version1 of this game
@@ -158,10 +127,7 @@ public class Table{
     private char player;           //saves the previous player
     private char champion;         //saves the winning player
     private char[][] table;
-    private boolean game_over;
     private boolean out_of_bounds=false;
-
-    private String str; //for MTCS
 
     //Constructor
         public Table(){//constructor for starting game
@@ -169,11 +135,9 @@ public class Table{
             this.player='-';             //no player
             this.champion='-';           //no champion
             this.table=new char[6][7];
-            this.str="";
             for(int i=0;i<6;i++){   //Form empty table
                 for(int j=0;j<7;j++){
                     this.table[i][j]='-';
-                    str+='-';
                 }
             }
         }
@@ -182,12 +146,8 @@ public class Table{
             this.player=copy.getPlayer();
             this.champion=copy.getChampion();
             this.table=copy.getTable();
-            this.str=copy.getString();
         }
     //Getters
-        public String getString(){
-            return this.str;
-        }
         public Play getPlay(){
             //Last play, to reach conf
             return play;
@@ -224,7 +184,6 @@ public class Table{
             //if a column is full, the row 0 in the col is != -
             return !(table[0][col]=='-');
         }
-        public boolean gameOver(){return game_over;}
     //Setters
         public void setPlay(Play new_play){
             this.play.setRow(new_play.getRow());
@@ -236,18 +195,15 @@ public class Table{
         }
         public void setOutOfBounds(boolean ob){this.out_of_bounds=ob;}
         public void setTable(char[][] table){
-            this.str="";
             for(int i=0;i<6;i++){
                 for(int j=0;j<7;j++){
                     this.table[i][j]=table[i][j];
-                    this.str+=table[i][j];
                 }
             }
         }
         public void setChampion(char c){
             champion=c;
         }
-        public void setGameOver(boolean go){this.game_over=go;}
     //Functions
         //Plays
         public void makeNewPlay(int col,char player){
@@ -279,13 +235,6 @@ public class Table{
                     Table son=new Table(); //copies table
                     son.table=this.getTable();
                     son.makeNewPlay(i,player);
-                    son.str="";
-                    //Update string
-                    for(int j=0;j<6;j++){
-                        for(int k=0;k<7;k++){
-                            son.str+=son.table[j][k];
-                        }
-                    }
                     if(!son.isOutOfBounds())
                         descendents.addFirst(son);
                 }
@@ -478,10 +427,10 @@ public class Table{
                 for(int j=0;j<7;j++){
                     if(j!=6){//if it's not last column
                         if(table[i][j]=='X'){//Human
-                            s+="| "+ConsoleColors.GREEN_BOLD+table[i][j]+ConsoleColors.RESET+" ";
+                            s+="| "+table[i][j]+" ";
                         }
                         else if(table[i][j]=='O'){//AI
-                            s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" ";
+                            s+="| "+table[i][j]+" ";
                         }
                         else{
                             s+="| - ";
@@ -490,10 +439,10 @@ public class Table{
                     }
                     else{
                         if(table[i][j]=='X'){//Human
-                            s+="| "+ConsoleColors.GREEN_BOLD+table[i][j]+ConsoleColors.RESET+" |\n";
+                            s+="| "+table[i][j]+" |\n";
                         }
                         else if(table[i][j]=='O'){//AI
-                            s+="| "+ConsoleColors.RED+table[i][j]+ConsoleColors.RESET+" |\n";
+                            s+="| "+table[i][j]+" |\n";
                         }
                         else{
                             s+="| - |\n";

@@ -16,7 +16,6 @@ class MinMaxAlphaBetaPrun{
      *    That is, when in a max lvel (AI turn) if this.alpha>=parent.beta => return
      *         when in a min level (Humam turn) if this.beta <=parent.alpha => return
      *
-     * To support this method we will use the MinMaxNoPrun Class
      *
      * Note the pseudocode:
      *  minMaxAlphaBeta(state):
@@ -57,13 +56,12 @@ class MinMaxAlphaBetaPrun{
     public Play alphaBeta(Table tb){
             nodes=0; nodes_pruned=0;
             double start,end,total;
-            start=System.nanoTime();
-       // Play p = max(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);
-            Play p=Alpha(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);        
+            start=System.nanoTime();       
+        Play p=Alpha(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);        
             end=System.nanoTime();
             total=((double)(end-start)/1_000_000_000.0);
             System.out.println("Nodes Pruned: "+nodes_pruned+"; Nodes :"+nodes+"; Time: "+total+" seconds;");
-            return p;
+        return p;
     }
     public Play Alpha(Table tb,int depth, int alpha,int beta){
         if(tb.isGameOver() || depth == max_depth)
@@ -81,24 +79,26 @@ class MinMaxAlphaBetaPrun{
 
             if(alpha >= beta){nodes_pruned++; return maxPlay;}
             if(maxPlay.getUtility() > alpha) alpha=maxPlay.getUtility();
+
         } return maxPlay;
     }
     public Play Beta(Table tb,int depth, int alpha,int beta){
         if(tb.isGameOver() || depth == max_depth)
             return new Play(tb.getPlay().getRow(),tb.getPlay().getCol(),tb.utility());
 
-            Play minPlay = new Play(Integer.MAX_VALUE);        
-            for(Table son : tb.getDescendents('O')){
-                nodes++;
-                Play p= Beta(son,depth+1,alpha,beta);
-                if(p.getUtility() < minPlay.getUtility()){
-                    minPlay.setRow(son.getPlay().getRow());
-                    minPlay.setCol(son.getPlay().getCol());
-                    minPlay.setUtility(p.getUtility());
-                }
+        Play minPlay = new Play(Integer.MAX_VALUE);        
+        for(Table son : tb.getDescendents('O')){
+            nodes++;
+            Play p= Beta(son,depth+1,alpha,beta);
+            if(p.getUtility() < minPlay.getUtility()){
+                minPlay.setRow(son.getPlay().getRow());
+                minPlay.setCol(son.getPlay().getCol());
+                minPlay.setUtility(p.getUtility());
+            }
     
-                if(alpha >= beta){nodes_pruned++; return minPlay;}
-                if(minPlay.getUtility() < beta) beta=minPlay.getUtility();
-            } return minPlay;
+            if(alpha >= beta){nodes_pruned++; return minPlay;}
+            if(minPlay.getUtility() < beta) beta=minPlay.getUtility();
+            
+        } return minPlay;
     }
 }
