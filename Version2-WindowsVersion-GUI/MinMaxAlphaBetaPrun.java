@@ -1,5 +1,4 @@
 import java.util.LinkedList;
-import java.util.Random;
 
 class MinMaxAlphaBetaPrun{
     /* This algorithm is an improvement over the minMax search algorithm
