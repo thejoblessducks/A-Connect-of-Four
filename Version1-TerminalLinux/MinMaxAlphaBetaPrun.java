@@ -43,7 +43,8 @@ class MinMaxAlphaBetaPrun{
     **/
     private int max_depth;    //the higher the depth, the harer the game will be
     private char player;      //Char thet defines the AI, Standart: 'O'
-    private int nodes;        //Counter for nodes explored
+    private int nodes;        //Counter for nodes prunned
+    private int nodes_minmax; //Counter for nodes
     private MinMaxNoPrun minmax;
 
     public MinMaxAlphaBetaPrun(int max_depth,char player){
@@ -55,13 +56,13 @@ class MinMaxAlphaBetaPrun{
                         MinMax Alpha-Beta Prun Algorithm
 ------------------------------------------------------------------------------*/
     public Play alphaBeta(Table tb){
-            nodes=0;
+            nodes=0; nodes_minmax=0;
             double start,end,total;
             start=System.nanoTime();
         Play p = max(new Table(tb),0,Integer.MIN_VALUE,Integer.MAX_VALUE);
             end=System.nanoTime();
             total=((double)(end-start)/1_000_000_000.0);
-            System.out.println("Nodes Explored: "+nodes+"; Time: "+total+" seconds;");
+            System.out.println("Nodes Pruned: "+nodes+"; Nodes MinMax:"+nodes_minmax+"; Time: "+total+" seconds;");
         return p;
     }
     public Play max(Table tb,int depth,int alpha,int beta){
@@ -72,10 +73,10 @@ class MinMaxAlphaBetaPrun{
         Play maxPlay = new Play(Integer.MIN_VALUE);
         for(Table son : tb.getDescendents('O')){
             minmax.setNodes(0);
-            nodes++;
+            nodes_minmax++;
             //Equal to MinMaxNoPrun
                 Play p = minmax.min(son,depth+1);
-                nodes+=minmax.getNodes();
+                nodes_minmax+=minmax.getNodes();
                 if(p.getUtility() > maxPlay.getUtility()){
                     maxPlay.setRow(son.getPlay().getRow());
                     maxPlay.setCol(son.getPlay().getCol());
@@ -89,7 +90,7 @@ class MinMaxAlphaBetaPrun{
                     }
                 }
             //Prunning
-            if(maxPlay.getUtility() >= beta) return maxPlay;
+            if(maxPlay.getUtility() < alpha){nodes++; return maxPlay;}
             if(alpha < maxPlay.getUtility()) alpha=maxPlay.getUtility();
         }return maxPlay;
     }
