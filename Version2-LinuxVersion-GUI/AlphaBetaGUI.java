@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-//Suported by //Suported by http://web.mit.edu/6.005/www/sp14/psets/ps4/java-6-tutorial/components.html
+//Suported by http://web.mit.edu/6.005/www/sp14/psets/ps4/java-6-tutorial/components.html
 public  class AlphaBetaGUI extends JFrame{
     private static final JButton[][] slots = new JButton[6][7];
     //private static final JPanel panel;
