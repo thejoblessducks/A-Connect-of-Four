@@ -42,7 +42,7 @@ class Node{
     public int getVisits(){
         return num_visits;
     }
-    public double getWins(){
+    public int getWins(){
         //returns the ai wins in backtrack
         return ai_wins;
     }
@@ -52,8 +52,8 @@ class Node{
         this.num_visits++;
         return this.num_visits;
     }
-    public double madeWin(int res){
-        //This node was involved in another win=>increment
+    public int madeWin(int res){
+        //This node was involved in another win ==>increment
         this.ai_wins+=res;
         return this.ai_wins;
     }
@@ -76,7 +76,7 @@ class MonteCarloTreeSearch{
      *      visitation is fair, we use the UCT value, influenced by the victories
      *      of a node and its visitations as well as its parent visitations' 
      * The MCTS algorithm is composed of 4 parts:
-     *      ->Selection, were it will chose a node, based on the best UCT value,
+     *      ->Selection, were it will chose a node, based on the best UCB value,
      *          until it is not leaf
      *      ->Expansion, once a leaf node is reached in the selection phase, 
      *          the algorithm will randomly chose one of its children, thats 
@@ -131,7 +131,8 @@ class MonteCarloTreeSearch{
         }
         end=System.nanoTime();
         total=((double)(end-start)/1_000_000_000.0);
-        System.out.println("Nodes Explored: "+n+"; Time: "+total+" seconds;");
+        int s=sizeTree();
+        System.out.println("Nodes Explored: "+s+"; Time: "+total+" seconds;");
         return child_max;
     }
 
@@ -140,11 +141,33 @@ class MonteCarloTreeSearch{
     }
     private Node nodeSelection(Node parent){
         for(int i=0;i<7;i++){
+            /*
+             * This cycle will work as a check-in for every descendent of a 
+             *      certain node, we will create all possible 7 children, 
+             *      note that a child is produced by inserting a certain cell
+             *      in one of 7 columns, as such if one of those columns is
+             *      full, then we can do nothing, as such the descendent is
+             *      unfit and must be ignored.
+             *  Now, if the said column is not full, then a node has potential
+             *      however, in case it hasn't been created, and nothe that this
+             *      creation only happens in the expansion phase, then its value 
+             *      is null, and we must stop this branch of recursion, hence 
+             *      the return parent
+             */
             if(parent.descendents[i]==null && !parent.table.isColumnFull(i))
                 return parent;
         }
-        double max_uct=-1;
-        int max_uct_index=-1;
+        /*
+         * Now, we made the first test and eliminated unwanted children, so now
+         *      we will cycle through the children, if they can not be produced,
+         *      that is, the parent's column is full, we will ignore them, if
+         *      such is false, then we will calculate its ucb and compare it to 
+         *      the best found, this process is designed in order to find which,
+         *      from all the parent's descendents has the best ucb, for that is
+         *      the node where we want to focus our search
+         */
+        double max_ucb=-1;
+        int max_ucb_index=-1;
         for(int i=0;i<7;i++){
             if(parent.table.isColumnFull(i)) continue;
 
@@ -157,17 +180,17 @@ class MonteCarloTreeSearch{
             else{
                 wins=curr.getVisits()-curr.getWins();
             }
-            double uct= (wins/curr.getVisits()) + Math.sqrt(2)*Math.sqrt(Math.log(parent.getVisits())/curr.getVisits());
-            //vall = uct where c=sqrt(2)--wikipedia
+            double ucb= (wins/curr.getVisits()) + Math.sqrt(2)*Math.sqrt(Math.log(parent.getVisits())/curr.getVisits());
+            //vall = ucb where c=sqrt(2)--wikipedia
 
-            //choose best uct
-            if(uct>max_uct){
-                max_uct=uct;
-                max_uct_index=i;
+            //choose best ucb
+            if(ucb>max_ucb){
+                max_ucb=ucb;
+                max_ucb_index=i;
             }
         }
-        if(max_uct_index==-1) return null; //no child
-        return nodeSelection(parent.descendents[max_uct_index]);
+        if(max_ucb_index==-1) return null; //no child
+        return nodeSelection(parent.descendents[max_ucb_index]);
     }
 
     public Node nodeExpantion(Node to_expand){
@@ -207,7 +230,6 @@ class MonteCarloTreeSearch{
         else if(simulator.getChampion()=='X')
             return -1;
         return 0;
-        //return simulator.utility();
     }
 
     public void nodeBackPropagation(Node explored, int result){
@@ -220,13 +242,13 @@ class MonteCarloTreeSearch{
     }
 
     public int sizeTree(){
-        return sizeTree(root,0);
+        return sizeTree(root);
     }
-    public int sizeTree(Node node,int s){
-        for(int i=0;i<7;i++){
-            if(node.descendents[i]!=null){
-                s=sizeTree(node.descendents[i],s+1);
-            }
+    public int sizeTree(Node node){
+        if(node==null) return 0;
+        int s=1;
+        for(Node son : node.descendents){
+                s+=sizeTree(son);
         }
         return s;
     }
