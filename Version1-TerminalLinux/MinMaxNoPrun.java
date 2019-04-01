@@ -25,7 +25,7 @@ class MinMaxNoPrun{
 /*------------------------------------------------------------------------------
                             Min Max Algorithm
 ------------------------------------------------------------------------------*/
-//adaptation of https://www.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html
+//theory adaptation of https://www.ntu.edu.sg/home/ehchua/programming/java/JavaGame_TicTacToe_AI.html
     public Play minMax(Table tb){
             /*
              * The min max algorithm will call the min and max one after the
